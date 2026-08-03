@@ -1,0 +1,72 @@
+# Shortcuts & Workflows
+
+### File & Editor
+| Shortcut | Action |
+|---|---|
+| Cmd+P | Command palette / `@` file search |
+| Cmd+N | New file |
+| Cmd+O | Open file |
+| Cmd+Shift+O | Open folder |
+| Cmd+S | Save |
+| Cmd+Alt+S | Save all |
+| Cmd+W | Close tab |
+| Cmd+L | Format document |
+| Cmd+D | Duplicate line |
+| Cmd+, | Settings |
+
+### Tabs
+| Shortcut | Action |
+|---|---|
+| Cmd+Shift+→ | Next tab |
+| Cmd+Shift+← | Previous tab |
+| Cmd+Shift+W | Close all tabs (spares pinned + terminals) |
+| Cmd+T | New terminal tab |
+
+### Panels
+| Shortcut | Action |
+|---|---|
+| Cmd+Shift+E | Toggle Explorer |
+| Cmd+Shift+F | Toggle Search |
+| Cmd+Shift+S | Open Search & focus input |
+| Cmd+Shift+G | Toggle Git |
+| Cmd+Shift+K | Toggle Kanban |
+| Cmd+Shift+J | Toggle Master Board |
+| Cmd+Shift+T | Toggle Terminal |
+| Cmd+Shift+P | Toggle Problems |
+| Cmd+Shift+A | Toggle AI Chat |
+| Cmd+Shift+D | Toggle Debugger |
+| Cmd+Shift+O | Toggle Orchestrator |
+| Cmd+Shift+L | Toggle Live Reload |
+
+### Actions
+| Shortcut | Action |
+|---|---|
+| Cmd+K | Git: stage all & commit |
+| Cmd+U | Git: push |
+| Cmd+Shift+C | Clone repository |
+| Cmd+\\ | Add editor split (up to 5 panes) |
+| Cmd+Shift+B | Open full Kanban board |
+| Cmd+Shift+M | Open Master Board |
+| Cmd+Shift+I | Open diff for active file |
+| Cmd+Shift+V | Open Markdown preview tab |
+| Cmd+Shift+X | Open Mindmap canvas tab |
+
+All shortcuts are remappable in Settings → Keybindings.
+
+## Command Palette
+
+- **Cmd/Ctrl+P** fuzzy-search every app command and open tab from anywhere, including inside the editor
+- **All actions** new file, open file/folder, save, save all, close tab, settings, and all panel toggles
+- **Tab switcher** jump to any open tab instantly from the palette
+- **File opener** type `@` then a filename to fuzzy-search and open any file in the project
+
+## Workspace
+
+- **Activity bar** vertical icon rail toggles each panel; click the active icon to collapse the sidebar
+- **AI chat toggle** AI icon in the title bar shows/hides the chat panel independently of the sidebar
+- **Tab management** pinnable tabs, drag-to-reorder, dirty indicators; pinned and terminal tabs survive "close all"
+- **Status bar** git branch + dirty count, active file path, context window meter, and context actions
+- **Recent projects** welcome screen lists recently opened projects; click to reopen
+- **Per-project state** open tabs, active tab, and tree expansion state restored on every reopen
+
+[← Back to Docs](/docs/index.md)
