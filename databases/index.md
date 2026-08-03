@@ -10,5 +10,3 @@
 - **Insert & delete rows** "+ New Row" adds a blank editable row (auto-generated columns like an ID are never part of the form); every row gets a delete button with a confirm prompt before it runs
 - **Write safety** a table/collection with no discoverable primary key (composite keys included) is left read-only for edits/inserts/deletes rather than guessing a match across visible columns; every write is re-verified against the row's real identity, never reconstructed from what's shown on screen
 - **Redis is key-value, not tabular** the browser is a cursor-based `SCAN` (never the blocking `KEYS`) with a key pattern filter, showing each key's type, TTL, and a truncated value preview; delete works on any key type, inline editing is available for string-type keys only (hash/list/set/zset need the query console's raw commands for now)
-
-[← Back to Docs](/docs/index.md)

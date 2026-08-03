@@ -61,5 +61,3 @@ Settings are stored at `~/.coder/config.json`. Created with defaults on first la
 - `better-sqlite3` + `mysql2` + `pg` + `mongodb` + `ioredis` (Databases panel, five engine drivers, all running in the main process)
 - `ssh2` (SFTP panel, SSH/SFTP client, runs in the main process)
 - Go LSP sidecar (language intelligence, see [Language Intelligence](../lsp/index.md))
-
-[← Back to Docs](/docs/index.md)

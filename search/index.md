@@ -6,5 +6,3 @@
 - **File filter** glob pattern to scope search to specific file types (e.g. `*.php`, `*.css`)
 - **Inline results** results grouped by file, showing matching lines with line numbers; click any match to jump to it in the editor
 - **Persistent state** search query, options, and results survive sidebar switches
-
-[← Back to Docs](/docs/index.md)

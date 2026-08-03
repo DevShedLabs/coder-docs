@@ -7,5 +7,3 @@
 - **Sandboxed** the embedded page runs with no access to Coder's own APIs (no preload, sandboxed, isolated session/storage), popups open in your real OS browser instead of a bare native window
 
 See also [Live Reload](../livereload/index.md), which can also open its preview in-app.
-
-[← Back to Docs](/docs/index.md)

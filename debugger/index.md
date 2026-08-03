@@ -16,5 +16,3 @@
 ## Requirements
 
 The debugger connects to debug adapters you have installed — none of them ship with Coder. See [Language Intelligence → DAP debuggers](../lsp/index.md#dap-debuggers) for the full per-language install table, including Rust/Zig's `lldb-dap` setup (ships with the Xcode Command Line Tools via `xcode-select --install`, or `brew install llvm`) and the caveat that both require a binary you've already built yourself (`cargo build` / `zig build`) — the debugger doesn't invoke either build tool for you.
-
-[← Back to Docs](/docs/index.md)

@@ -31,5 +31,3 @@ Prompts are stored in `~/.coder/`:
 | `harness.md` | Guardrails and instructions always appended to the system prompt. Editable in-app via the Prompts panel. |
 | `prompts/*.md` | Custom prompts selectable per-session from the chat model row. |
 | `skills/<name>/SKILL.md` | Progressive-disclosure skills, see [Skills](../skills/index.md). Managed in the same Prompts panel. |
-
-[← Back to Docs](/docs/index.md)

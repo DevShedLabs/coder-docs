@@ -12,5 +12,3 @@
 - **Branch + ahead/behind** always visible in the panel header and status bar
 - **Dirty count badge** uncommitted file count shown right on the Git activity-bar icon, so you don't need the panel open to see there's something to commit
 - Uses your system git, inherits your existing config, SSH keys, and credential helpers
-
-[← Back to Docs](/docs/index.md)

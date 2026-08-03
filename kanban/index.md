@@ -12,5 +12,3 @@
 Each project stores its board at `{project-root}/board.json`. The format is human-readable JSON that AI tools can write directly, useful for having the AI manage your task list. Add `board.json` to `.gitignore` if you don't want it committed.
 
 See also [Master Board](../masterboard/index.md) for a cross-project view.
-
-[← Back to Docs](/docs/index.md)

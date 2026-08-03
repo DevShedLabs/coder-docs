@@ -5,5 +5,3 @@
 - **Renameable tabs** double-click a terminal tab name to rename it (e.g. "Claude", "NPM", "Dev Server")
 - **Project-aware** new terminals open in the current project root automatically
 - **Persistent sessions** terminal tabs survive panel switches and layout changes
-
-[← Back to Docs](/docs/index.md)

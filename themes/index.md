@@ -158,5 +158,3 @@ An editor theme is a Monaco `IStandaloneThemeData` object — `base` (`'vs-dark'
 ```
 
 The `*.php` rules exist because Monaco's bundled PHP grammar emits its own token names (`variable.php`, `keyword.php`, etc.) instead of matching the generic ones above it — without them, PHP code falls back to plain foreground for variables, property/method names, and punctuation. Every other token type (`comment`, `keyword`, `string`, …) works across all languages via Monaco's generic Monarch token names.
-
-[← Back to Docs](/docs/index.md)

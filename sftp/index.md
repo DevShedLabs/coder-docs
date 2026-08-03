@@ -7,5 +7,3 @@
 - **Explicit upload, not silent save** editing a remote file shows a small toolbar above the editor with an **Upload** button and live status (uploading / uploaded / failed with retry); Cmd+S also uploads, but a network write is never assumed to succeed the way a local save is
 - **Discard-changes guard** closing a remote tab with unsaved edits asks for confirmation first, since losing an edit to a live server's config is worse than losing a local scratch change
 - **Create, rename, delete** New File/New Folder, inline rename, and delete are available from the tree's right-click menu; deleting a non-empty folder (e.g. `vendor/` or `node_modules/`) offers a recursive delete after confirming, since SFTP has no native "rm -rf"
-
-[← Back to Docs](/docs/index.md)

@@ -74,5 +74,3 @@ If you need to bound it:
 ## Planned: in-app setup notices
 
 Right now, a missing server/adapter just means that language quietly runs without the feature it powers. A future pass should surface this directly in Coder — e.g. a small notice in the affected panel ("No language server found for Zig — [install zls](https://github.com/zigtools/zls)") linking straight to the relevant install docs above, rather than requiring a trip to this file.
-
-[← Back to Docs](/docs/index.md)

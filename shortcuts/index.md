@@ -68,5 +68,3 @@ All shortcuts are remappable in Settings → Keybindings.
 - **Status bar** git branch + dirty count, active file path, context window meter, and context actions
 - **Recent projects** welcome screen lists recently opened projects; click to reopen
 - **Per-project state** open tabs, active tab, and tree expansion state restored on every reopen
-
-[← Back to Docs](/docs/index.md)

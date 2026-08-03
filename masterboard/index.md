@@ -8,5 +8,3 @@
 - **Search** compact inline search in the header works in both Board and Table view
 
 The Master Board reads every registered project's `board.json` and merges them into one cross-project view, no separate copy of your project tasks is kept. Cards with no project attached (e.g. sketching out a plan before the project exists) are stored in `~/.coder/global-board.json` instead. Editing a card writes back to whichever file it actually belongs to, so the per-project Kanban board and the Master Board always agree.
-
-[← Back to Docs](/docs/index.md)

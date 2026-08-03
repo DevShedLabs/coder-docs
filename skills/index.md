@@ -15,5 +15,3 @@
     templates/
       foo.md          # bundled files can be nested in subfolders
 ```
-
-[← Back to Docs](/docs/index.md)

@@ -10,5 +10,3 @@
 - **Persistent layout** dragged positions save to a `.mindmap.md.layout.json` sidecar next to the source file, so manual rearrangement survives reopening the canvas
 - **Export** toolbar buttons export the current canvas view as PNG or PDF
 - **Parse errors are line-numbered** malformed syntax shows exactly which line and why, right in the canvas view, instead of failing silently
-
-[← Back to Docs](/docs/index.md)

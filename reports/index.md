@@ -6,5 +6,3 @@
 - **Raw payloads on demand** each round's system prompt, full message history, response text, reasoning, and tool call args/results are viewable in collapsible panels, collapsed by default so the view stays scannable until you need to inspect exactly what was sent
 - **Export to Markdown or HTML** export any session's full report as `{sessionId}_report.md` (GitHub-flavored markdown, ideal for pasting into an AI chat to ask what can be tuned) or `{sessionId}_report.html` (a standalone, styled file with real collapsible sections, viewable in any browser)
 - **Built for tuning, not just accounting** the point of this data is diagnosing where tokens actually go — system prompt bloat, redundant tool calls, unbounded history growth — so the system prompt can be trimmed with evidence instead of guesswork
-
-[← Back to Docs](/docs/index.md)

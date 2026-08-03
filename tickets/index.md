@@ -8,5 +8,3 @@
 - **Add to Kanban board** one click imports an issue or PR as a Kanban card (title + body), tagged so re-importing later updates the same card instead of duplicating it; your card's column/status is never overwritten by a re-import
 - **Provider-agnostic under the hood** built against a small `TicketProvider` interface; GitHub is implemented today, GitLab/Bitbucket are a matter of adding a sibling implementation
 - Token stored in Settings → Integrations (classic personal access token recommended; fine-grained works too, with the setup steps spelled out in-app)
-
-[← Back to Docs](/docs/index.md)

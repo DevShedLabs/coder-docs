@@ -8,5 +8,3 @@
 - **Title bar icon** always accessible from the coin icon in the top title bar
 
 See also [Reports](../reports/index.md) for a full verbatim recorder of every request/response, not just token counts.
-
-[← Back to Docs](/docs/index.md)
