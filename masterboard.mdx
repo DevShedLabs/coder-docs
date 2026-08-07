@@ -1,0 +1,13 @@
+---
+title: Master Board
+description: "Cross-project task index that aggregates every project's Kanban board into one view."
+---
+
+- **Cross-project task index** one place to see and manage tasks across every project, with no project open required; lives in its own activity bar icon, independent of the Kanban panel
+- **Aggregates every project** merges each registered project's own `board.json` into one view, tagged with a project badge, plus standalone cards that aren't tied to any project yet (for sketching out a plan before the project exists)
+- **Single source of truth** editing a project-tagged card from the Master Board writes straight back into that project's `board.json`; nothing is duplicated between the two views
+- **Board or Table view** toggle between the familiar kanban layout and a flat sortable table (Title, Status, Project, Updated) for people who'd rather not drag cards between columns
+- **Filter by project** narrow the view to a single project, cards with no project, or everything
+- **Search** compact inline search in the header works in both Board and Table view
+
+The Master Board reads every registered project's `board.json` and merges them into one cross-project view, no separate copy of your project tasks is kept. Cards with no project attached (e.g. sketching out a plan before the project exists) are stored in `~/.coder/global-board.json` instead. Editing a card writes back to whichever file it actually belongs to, so the per-project Kanban board and the Master Board always agree.
