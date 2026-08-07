@@ -1,49 +1,85 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "DevShed Coder",
-  "colors": {
-    "primary": "#89b4fa",
-    "light": "#89dceb",
-    "dark": "#1e1e2e"
-  },
-  "navigation": {
-    "groups": [
-      {
-        "group": "Get Started",
-        "pages": ["index"]
-      },
-      {
-        "group": "Core",
-        "pages": [
-          "ai",
-          "skills",
-          "orchestrator",
-          "tokens",
-          "reports",
-          "lsp",
-          "debugger",
-          "terminal",
-          "search",
-          "git",
-          "tickets"
-        ]
-      },
-      {
-        "group": "Data & Files",
-        "pages": ["databases", "sftp", "livereload", "browser"]
-      },
-      {
-        "group": "Planning",
-        "pages": ["kanban", "masterboard", "mindmaps", "math"]
-      },
-      {
-        "group": "Customization",
-        "pages": ["themes", "config", "shortcuts"]
-      }
-    ]
-  },
-  "navbar": {
-    "links": []
-  }
+	"$schema": "https://mintlify.com/docs.json",
+	"theme": "mint",
+	"name": "DevShed Coder",
+	"colors": {
+		"primary": "#89b4fa",
+		"light": "#89dceb",
+		"dark": "#1e1e2e"
+	},
+	"navigation": {
+		"groups": [
+			{
+				"group": "Get Started",
+				"pages": [
+					"index"
+				]
+			},
+			{
+				"group": "Core",
+				"pages": [
+					"ai",
+					"skills",
+					"orchestrator",
+					"tokens",
+					"reports",
+					"lsp",
+					"debugger",
+					"terminal",
+					"search",
+					"git",
+					"tickets"
+				]
+			},
+			{
+				"group": "Data & Files",
+				"pages": [
+					"databases",
+					"sftp",
+					"livereload",
+					"browser"
+				]
+			},
+			{
+				"group": "Planning",
+				"pages": [
+					"kanban",
+					"masterboard",
+					"mindmaps",
+					"math"
+				]
+			},
+			{
+				"group": "Customization",
+				"pages": [
+					"themes",
+					"config",
+					"shortcuts"
+				]
+			}
+		]
+	},
+	"contextual": {
+		"options": [
+			"copy",
+			"view",
+			"assistant",
+			"chatgpt",
+			"claude",
+			"perplexity",
+			"grok",
+			"aistudio",
+			"devin",
+			"devin-desktop",
+			"mcp",
+			"cursor",
+			"vscode",
+			"devin-mcp",
+			"download-spec",
+			"download-pdf"
+		]
+	},
+	"navbar": {
+		"links": []
+	}
 }
