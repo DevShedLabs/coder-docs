@@ -12,6 +12,7 @@
 		"dark": "logo.png",
 		"href": "https://coderide.dev/"
 	},
+	"favicon": "logo.png",
 	"navigation": {
 		"groups": [
 			{
