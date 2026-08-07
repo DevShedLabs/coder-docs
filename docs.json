@@ -59,26 +59,6 @@
 			}
 		]
 	},
-	"contextual": {
-		"options": [
-			"copy",
-			"view",
-			"assistant",
-			"chatgpt",
-			"claude",
-			"perplexity",
-			"grok",
-			"aistudio",
-			"devin",
-			"devin-desktop",
-			"mcp",
-			"cursor",
-			"vscode",
-			"devin-mcp",
-			"download-spec",
-			"download-pdf"
-		]
-	},
 	"navbar": {
 		"links": []
 	}
