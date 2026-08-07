@@ -7,6 +7,13 @@
 		"light": "#89dceb",
 		"dark": "#1e1e2e"
 	},
+	"background": {
+		"decoration": "grid",
+		"color": {
+			"light": "#F8FAFC",
+			"dark": "#0F172A"
+		}
+	},
 	"logo": {
 		"light": "logo.png",
 		"dark": "logo.png",
