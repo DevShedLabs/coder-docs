@@ -48,19 +48,3 @@ Settings are stored at `~/.coder/config.json`. Created with defaults on first la
 | `{project-root}/connections/sftp.json` | Project-scoped SFTP connections |
 | `{project-root}/.coder/memory/*.md` | AI project memory, see [AI Agent](/ai) |
 | `{project-root}/.coder/orchestration/runs/<runId>/` | Orchestrator run data, see [Orchestrator](/orchestrator) |
-
-## Tech Stack
-
-- Electron 42
-- React 18 + TypeScript
-- Vite 8 (Rolldown bundler)
-- Monaco Editor (fully bundled, no CDN dependency)
-- Zustand 5
-- AI SDK v6 (`ai` + `@ai-sdk/fireworks`), 8 providers: Fireworks, xAI (Grok), Anthropic, Cerebras, Baseten, Together AI, OpenAI, OpenRouter
-- `react-markdown` + `remark-gfm` + `remark-math`/`rehype-katex` (math rendering)
-- `node-pty` + `xterm.js` (terminal)
-- `ripgrep` (project search)
-- `ws` + `micromatch` (Live Reload)
-- `better-sqlite3` + `mysql2` + `pg` + `mongodb` + `ioredis` (Databases panel, five engine drivers, all running in the main process)
-- `ssh2` (SFTP panel, SSH/SFTP client, runs in the main process)
-- Go LSP sidecar (language intelligence, see [Language Intelligence](/lsp))
