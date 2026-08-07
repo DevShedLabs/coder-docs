@@ -7,6 +7,10 @@
 		"light": "#89dceb",
 		"dark": "#1e1e2e"
 	},
+	"appearance": {
+		"default": "dark",
+		"strict": true
+	},
 	"background": {
 		"decoration": "grid",
 		"color": {
