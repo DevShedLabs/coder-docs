@@ -11,3 +11,12 @@ description: "GitHub issues and pull requests, connected to your project's own g
 - **Add to Kanban board** one click imports an issue or PR as a Kanban card (title + body), tagged so re-importing later updates the same card instead of duplicating it; your card's column/status is never overwritten by a re-import
 - **Provider-agnostic under the hood** built against a small `TicketProvider` interface; GitHub is implemented today, GitLab/Bitbucket are a matter of adding a sibling implementation
 - Token stored in Settings → Integrations (classic personal access token recommended; fine-grained works too, with the setup steps spelled out in-app)
+
+## PR Handling
+
+__Setup__
+
+- Make sure you have a `fine-grained personal access token`
+- Token must be set to the Organization
+- Token must have the permissions `issues`, `pull requests`, `contents` and must be set to `read and write`
+- Open the tickets panel and click the 🔑 to add your project level token
