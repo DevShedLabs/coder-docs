@@ -2,6 +2,7 @@
 title: Debugger
 description: "Multi-language step-debugging (Node, Go, Rust, Python, PHP) over the Debug Adapter Protocol."
 ---
+![Debugger](media/debugger.jpg)
 
 - **Multi-language** debug Node.js, Go, Rust (requires `lldb-dap`), Python, and PHP (via xdebug) using the Debug Adapter Protocol (DAP); language auto-detected from the project, or manually selected in the launch form
 - **Step controls** Continue, Step Over, Step In, Step Out, and Stop; controls are disabled while the program is running and re-enable on each pause
@@ -18,4 +19,11 @@ description: "Multi-language step-debugging (Node, Go, Rust, Python, PHP) over t
 
 ## Requirements
 
-The debugger connects to debug adapters you have installed — none of them ship with Coder. See [Language Intelligence → DAP debuggers](/lsp#dap-debuggers) for the full per-language install table, including Rust/Zig's `lldb-dap` setup (ships with the Xcode Command Line Tools via `xcode-select --install`, or `brew install llvm`) and the caveat that both require a binary you've already built yourself (`cargo build` / `zig build`) — the debugger doesn't invoke either build tool for you.
+The debugger connects to debug adapters you have installed — none of them ship with Coder. 
+See [Language Intelligence → DAP debuggers](/lsp#dap-debuggers) for the full per-language install table, including:
+- Rust/Zig's `lldb-dap` setup (ships with the Xcode Command Line Tools via `xcode-select --install`, or `brew install llvm`) 
+- the caveat that both require a binary (`cargo build` / `zig build`) 
+- the debugger doesn't invoke either build tool for you.
+
+## Debugger Reports
+![Debugger report](media/debugger-report.jpg)

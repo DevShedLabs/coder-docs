@@ -3,6 +3,8 @@ title: Databases
 description: "SQLite, MySQL, PostgreSQL, MongoDB, and Redis behind one connection tree and query console."
 ---
 
+![Databases](media/databases.jpg)
+
 - **Five engines** SQLite, MySQL, PostgreSQL, MongoDB, and Redis, each behind the same connection tree, table/collection browser, and query console
 - **Global or per-project connections** save a connection to `~/.coder/connections/databases.json` (available everywhere) or to the open project's `connections/databases.json` (scoped to that project); the sidebar tree groups both together
 - **Connection form** a connection string/URI field (paste one and it wins outright) alongside discrete Host/Port/Username/Password/Database fields for engines that support both; **Test Connection** turns the Database field into a picker of real databases found on the server once it succeeds; SQLite connects to a local file via a native file-picker instead
@@ -13,3 +15,11 @@ description: "SQLite, MySQL, PostgreSQL, MongoDB, and Redis behind one connectio
 - **Insert & delete rows** "+ New Row" adds a blank editable row (auto-generated columns like an ID are never part of the form); every row gets a delete button with a confirm prompt before it runs
 - **Write safety** a table/collection with no discoverable primary key (composite keys included) is left read-only for edits/inserts/deletes rather than guessing a match across visible columns; every write is re-verified against the row's real identity, never reconstructed from what's shown on screen
 - **Redis is key-value, not tabular** the browser is a cursor-based `SCAN` (never the blocking `KEYS`) with a key pattern filter, showing each key's type, TTL, and a truncated value preview; delete works on any key type, inline editing is available for string-type keys only (hash/list/set/zset need the query console's raw commands for now)
+
+## Examples
+
+### MongoDB 
+![MongoDB](media/mongo.jpg)
+
+### SQLite
+![SQLite](media/sqlite.jpg)
