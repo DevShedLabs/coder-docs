@@ -3,6 +3,8 @@ title: Mindmaps
 description: "Plain-text .mindmap.md files with an interactive canvas view."
 ---
 
+![Mindmap](media/mindmaps.jpg)
+
 - **Plain-text format** a `.mindmap.md` file is a lightweight, strict subset of Mermaid's `mindmap` syntax: `mindmap` on the first line, a `root((Label))` on the second, then an indented tree, one node per line, indentation depth defines parent/child structure
 - **Two views, one file** open as plain text in a Code tab like any markdown file, or Cmd+Shift+X for an interactive Canvas tab that live-updates as the source text changes
 - **Node shapes** wrap a label in `(Label)` for rounded, `[Label]` for square, `((Label))` for circle, or leave it bare for a default box; purely visual, doesn't affect tree structure
@@ -13,3 +15,10 @@ description: "Plain-text .mindmap.md files with an interactive canvas view."
 - **Persistent layout** dragged positions save to a `.mindmap.md.layout.json` sidecar next to the source file, so manual rearrangement survives reopening the canvas
 - **Export** toolbar buttons export the current canvas view as PNG or PDF
 - **Parse errors are line-numbered** malformed syntax shows exactly which line and why, right in the canvas view, instead of failing silently
+
+
+## Mindmap Example
+
+The following shows a Mindmap with Chemistry formulas 
+
+![Math Formulas](media/chem.png)
