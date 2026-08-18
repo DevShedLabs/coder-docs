@@ -3,19 +3,20 @@ title: Git
 description: "Status, stage/unstage, commit, push/pull/fetch, branch management, and discard changes."
 ---
 
+![Git Sync](media/git-sync.jpg)
+
+<Info>You will see 2 important notices in the above image.</Info>
+1. The create branch notice. 
+2. Sync notice, letting you know there are upstream changes.
+
 ## Workflows
 - `Cmd+B` Create branch ( name + "from" branch dropdown, defaults to current ), creates + checks out in one step
 - `Cmd+K` Stage all & commit
 - `Cmd+U` Push ( now also auto-sets upstream for a brand-new branch )
 - `Cmd+;` Create PR
+- Delete branches (if you need)
 
 <Warning>Creating cross org PR's requires a classic token with repo scope in GitHub</Warning>
-
-
-__Hopefully__ the create branch notices saves some pain points.
-
-![Create Branch Notice](images/git-notice.jpg)
-
 
 ## Details 
 
@@ -33,11 +34,11 @@ __Hopefully__ the create branch notices saves some pain points.
 - Uses your system git, inherits your existing config, SSH keys, and credential helpers
 - Create new PR's right from the interface
 
-![Create PR](images/pr.jpg)
+![Create PR](media/pr.jpg)
 
 __Auto Upstream detection__
 
-![Create PR](images/create-pr.jpg)
+![Create PR](media/create-pr.jpg)
 
 
 ## Shotcut Key Commands
@@ -47,4 +48,6 @@ __Auto Upstream detection__
 | Cmd+Shift+G | Toggle Git |
 | Cmd+K | Git: stage all & commit |
 | Cmd+U | Git: push |
+| Cmd+B | Create branch |
+| Cmd+; | Create PR |
 | Cmd+Shift+C | Clone repository |
