@@ -42,7 +42,8 @@
 					"terminal",
 					"search",
 					"git",
-					"tickets"
+					"tickets",
+					"pr-management"
 				]
 			},
 			{
