@@ -1,0 +1,57 @@
+---
+title: Jarvis Mode
+description: "Text-to-speech for Coder — read-aloud, per-model voices, and an agent that can talk back. The first half of full voice control."
+---
+
+- **Read aloud** click the speaker icon on any assistant message to hear it spoken; click again to stop
+- **Read File** right-click any editor tab and choose **Read File** to hear the whole file read aloud
+- **Read Selected** select any text in the editor, right-click, and choose **Read Selected**
+- **The agent can talk back** turn on Jarvis Mode and the AI chat agent — plus Claude Code or any other CLI agent connected through `coder-mcp` — can speak a short spoken summary on its own, e.g. after finishing a long task while you were away
+- **Three backends** the OS's built-in voices (free, instant), OpenRouter TTS models, or Cartesia's streaming API (starts speaking before the whole clip finishes generating)
+- **Per-model voices** give different models their own personality — Claude gets one voice, GPT gets another — instead of everything sharing one default
+- **One global Stop** a Stop button appears in the title bar the moment anything is speaking, no matter which of the above started it
+- **Off by default** nothing here is on until you turn it on in Settings
+
+<Info>This is Phase 1 — Coder can speak to you. Phase 2 will close the loop: hands-free listening and full voice conversation, so "Jarvis Mode" becomes a real two-way mode instead of read-aloud with a good name.</Info>
+
+## Turning it on
+
+Speech Output lives in **Settings → Models → Speech Output**.
+
+1. Toggle **Enable read-aloud on assistant messages** — this turns on the speaker icon on chat messages, plus Read File and Read Selected.
+2. Pick a **Backend** (see below) and fill in its model/voice/key.
+3. Optionally toggle **Let the agent speak a short summary on its own** — this is the same setting the title bar's Jarvis Mode button flips. Off by default; turning it on lets the agent decide when to speak, not just you clicking a button.
+
+The title bar's Jarvis Mode icon (next to Settings) is a shortcut for step 3 — click it to toggle the agent's own speak permission without opening Settings. It lights up solid when on.
+
+## Backends
+
+| Backend | Cost | Latency | Notes |
+|---|---|---|---|
+| **System (Internal)** | Free | Instant — no network call | Uses the OS's installed voices via the browser's built-in speech API. macOS ships extra **Premium** and **Enhanced** voices as a free download (System Settings → Accessibility → Spoken Content → System Voice) — Coder surfaces those first when available. Has its own Speed slider. |
+| **OpenRouter** | Pay-per-use | One request, waits for the whole clip to generate and download before it can play | Wide model choice; set the model id and optional voice id yourself — OpenRouter's TTS catalog is new and changes, so there's no dropdown to keep in sync. |
+| **Cartesia** | Pay-per-use | Streams audio back over a persistent connection — starts playing on the first chunk instead of waiting for the full clip | Needs its own API key (separate from your other provider keys). Has its own Speed and Volume sliders (sonic-3+ models only). Voice ids come from [play.cartesia.ai](https://play.cartesia.ai) — Cartesia has no searchable voice names. |
+
+<Tip>If read-aloud feels slow, that's almost always OpenRouter waiting on a full MP3 to generate and download. Cartesia (streaming) or System (Internal) are both effectively instant.</Tip>
+
+## Voice groups — give models their own voice
+
+Under **Voice groups**, click **+ Add Group** to assign a specific voice to a specific model, separate from your default voice.
+
+Each group has:
+- A **label** — just for your own reference, e.g. "Claude" or "Luna"
+- A **provider** match — the Settings → Models provider key the model belongs to, e.g. `anthropic` or `openai`
+- An optional **model** match — a substring to narrow within that provider, e.g. `luna` to only match models with "luna" in their id
+- Its own full backend/voice/speed/volume config, same as the default
+
+Groups are checked top to bottom; the first one that matches wins. If nothing matches, the default voice at the top of the section is used.
+
+This also covers Claude Code: since Claude Code isn't running through Coder's own model picker, it's treated as provider `anthropic` for matching purposes — so a group targeting `anthropic` applies to both an in-app chat using a Claude model *and* a Claude Code session speaking through `coder-mcp`.
+
+## Stopping playback
+
+A red Stop button appears in the title bar automatically whenever anything is speaking — from any source. Click it, or click a speaker icon that's already playing, to stop immediately. At most one thing speaks at a time; starting a new read-aloud stops whatever was already playing.
+
+## Clean text
+
+Speech text is cleaned before it's sent to be spoken: markdown formatting (headings, bold, links, tables), emoji, and fenced code blocks are stripped out first, so you hear plain spoken sentences, not markdown syntax or code read character-by-character.

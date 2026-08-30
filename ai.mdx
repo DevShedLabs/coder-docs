@@ -1,6 +1,6 @@
 ---
 title: AI Agent
-description: "Streaming chat, multiple providers, tool use, extended thinking, voice dictation, and live editor streaming."
+description: "Streaming chat, multiple providers, tool use, extended thinking, voice dictation, Jarvis Mode read-aloud, and live editor streaming."
 ---
 
 ![Swift for Cheap](media/Swift-for-cheap.jpg)
@@ -12,6 +12,7 @@ description: "Streaming chat, multiple providers, tool use, extended thinking, v
 - **Message queue** send up to 3 follow-up messages while the AI is still working; they execute in order when the current response finishes
 - **Editor selection context** Cmd+C in the editor snapshots the selected lines, file path, and line numbers as context attached to your next chat message
 - **Voice dictation** mic button in the chat input records your voice and transcribes it to text via OpenAI, Fireworks, or OpenRouter's Whisper models; off by default (enable in Settings → Speech Input, needs an API key for the chosen provider)
+- **Jarvis Mode (read-aloud)** the agent can read its own replies back to you, or speak a short summary on its own when Jarvis Mode is on; see [Jarvis Mode](/jarvis-mode)
 - **Math formulas in chat** write `$...$`/`$$...$$` LaTeX and it renders as typeset math via KaTeX (see [Math Formulas](/math))
 - **Code completion** inline ghost-text completion with a separate model (Fireworks AI); press Tab to accept
 - **Auto-open toggles** status-bar toggles to auto-open files or diffs when the AI writes them; the two modes are mutually exclusive to avoid tab overload on scaffold projects
