@@ -51,6 +51,7 @@
 				"group": "Data & Files",
 				"pages": [
 					"databases",
+					"api-testing",
 					"sftp",
 					"livereload",
 					"browser"
