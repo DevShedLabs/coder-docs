@@ -3,7 +3,7 @@ title: Themes
 description: "Independent UI and editor color themes, plus custom themes loaded from disk."
 ---
 
-Coder has two independent theming systems: a **UI theme** (the color palette used by the app's own chrome — sidebar, panels, menus, title bar) and an **editor theme** (the syntax-highlighting colors used by the Monaco code editor). They're set separately in **Settings → General** and can be mixed freely — there's no requirement that they match.
+Coder has two independent theming systems: a **UI theme** (the color palette used by the app's own chrome, sidebar, panels, menus, title bar) and an **editor theme** (the syntax-highlighting colors used by the Monaco code editor). They're set separately in **Settings → General** and can be mixed freely, there's no requirement that they match.
 
 ## UI Themes
 
@@ -11,24 +11,24 @@ Six built-in palettes, selectable from the **Theme** dropdown in Settings → Ge
 
 | Theme | Style |
 |---|---|
-| Coder Dark (Mocha) | Default — Catppuccin Mocha, purple/blue accent |
+| Coder Dark (Mocha) | Default, Catppuccin Mocha, purple/blue accent |
 | Coder Light (Latte) | Catppuccin Latte, blue accent |
 | Charcoal | Neutral, low-saturation dark gray (Cursor-style), monochrome/white accent |
 | Charcoal Light | Light counterpart to Charcoal, same neutral character with a dark accent |
 | Cappuccino | Warm dark (Sublime/Monokai-style), amber/orange accent |
 | Cappuccino Light | Neutral warm-white counterpart to Cappuccino |
 
-There's also a **System** option, which follows your OS's light/dark preference — but only ever resolves to Coder Dark or Coder Light, never Charcoal or Cappuccino, since there's no principled "system version" of a themed palette beyond the app's own default pair.
+There's also a **System** option, which follows your OS's light/dark preference, but only ever resolves to Coder Dark or Coder Light, never Charcoal or Cappuccino, since there's no principled "system version" of a themed palette beyond the app's own default pair.
 
 Switching takes effect immediately, no restart required. Your last choice is remembered on next launch with no flash of the wrong palette (a small cache of the resolved theme is applied before the app's UI even starts rendering).
 
 ## Editor Themes
 
-Eight built-in Monaco themes, selectable from the **Editor theme** dropdown in Settings → General — completely independent of the UI theme above:
+Eight built-in Monaco themes, selectable from the **Editor theme** dropdown in Settings → General, completely independent of the UI theme above:
 
 | Theme | Style |
 |---|---|
-| Coder Dark (Mocha) | Default — matches Catppuccin Mocha |
+| Coder Dark (Mocha) | Default, matches Catppuccin Mocha |
 | Coder Light (Latte) | Matches Catppuccin Latte |
 | Coder Macchiato | Alternate dark, warmer/lower contrast than Mocha |
 | Coder Frappé | Softest/warmest dark, lowest contrast |
@@ -39,17 +39,17 @@ Eight built-in Monaco themes, selectable from the **Editor theme** dropdown in S
 
 Each theme includes PHP-specific token color rules in addition to the generic ones, since Monaco's bundled PHP grammar emits its own token names that the generic rules alone don't match.
 
-Switching the editor theme applies live to every open tab and the git diff viewer — no reopening files required.
+Switching the editor theme applies live to every open tab and the git diff viewer, no reopening files required.
 
-The **integrated terminal** also follows the editor theme rather than the UI theme, since it's monospace/code-adjacent text — each editor theme has a matching 16-color terminal palette (hand-derived from that theme's own colors, since ANSI terminal colors aren't part of a Monaco theme). Switching applies live to every open terminal tab.
+The **integrated terminal** also follows the editor theme rather than the UI theme, since it's monospace/code-adjacent text, each editor theme has a matching 16-color terminal palette (hand-derived from that theme's own colors, since ANSI terminal colors aren't part of a Monaco theme). Switching applies live to every open terminal tab.
 
 ## Mix and match
 
-Because the two systems are independent, you can run e.g. the **Charcoal** UI with the **Coder Dark (Mocha)** editor theme, or **Coder Light** UI with **Cappuccino** editor colors — whatever combination you prefer. The "coordinated" pairs (same name on both sides, like Charcoal ↔ Charcoal) are simply the sets that were designed to look like one cohesive system if you want that, not a requirement.
+Because the two systems are independent, you can run e.g. the **Charcoal** UI with the **Coder Dark (Mocha)** editor theme, or **Coder Light** UI with **Cappuccino** editor colors, whatever combination you prefer. The "coordinated" pairs (same name on both sides, like Charcoal ↔ Charcoal) are simply the sets that were designed to look like one cohesive system if you want that, not a requirement.
 
 ## Custom themes
 
-Coder loads your own themes from `~/.coder/themes/` — **one folder per theme**, and the **folder name is the theme id** (shown as-is in the dropdowns, e.g. `themes/dracula/` → "dracula"):
+Coder loads your own themes from `~/.coder/themes/`, **one folder per theme**, and the **folder name is the theme id** (shown as-is in the dropdowns, e.g. `themes/dracula/` → "dracula"):
 
 ```
 ~/.coder/themes/
@@ -61,20 +61,20 @@ Coder loads your own themes from `~/.coder/themes/` — **one folder per theme**
     editor.json
 ```
 
-- **UI**: `~/.coder/themes/<your-id>/ui.css` — a `:root { --var: value; ... }` block, same 15 variables as the built-in palettes (exact shape below). No `data-theme="..."` attribute needed on the selector — the folder name already is the id.
-- **Editor**: `~/.coder/themes/<your-id>/editor.json` — a Monaco `IStandaloneThemeData` object (exact shape below).
+- **UI**: `~/.coder/themes/<your-id>/ui.css`, a `:root { --var: value; ... }` block, same 15 variables as the built-in palettes (exact shape below). No `data-theme="..."` attribute needed on the selector, the folder name already is the id.
+- **Editor**: `~/.coder/themes/<your-id>/editor.json`, a Monaco `IStandaloneThemeData` object (exact shape below).
 
-Either file can exist without the other — a theme can be UI-only, editor-only, or both. There's no requirement that the two halves under one folder actually match stylistically; that's just where the convenience of "one id, one folder" comes from.
+Either file can exist without the other, a theme can be UI-only, editor-only, or both. There's no requirement that the two halves under one folder actually match stylistically; that's just where the convenience of "one id, one folder" comes from.
 
 Custom themes appear in a separate **Custom** group at the bottom of the Theme / Editor theme dropdowns in Settings → General, once at least one is loaded.
 
-**Rescanned when Settings opens** — not file-watched. Edit a file on disk, then reopen (or re-focus) Settings → General to pick up the change; no app restart needed. A theme that fails validation is skipped and reported as a toast notification (e.g. missing CSS variables, invalid Monaco theme shape) rather than breaking the rest of your custom set or the app.
+**Rescanned when Settings opens**, not file-watched. Edit a file on disk, then reopen (or re-focus) Settings → General to pick up the change; no app restart needed. A theme that fails validation is skipped and reported as a toast notification (e.g. missing CSS variables, invalid Monaco theme shape) rather than breaking the rest of your custom set or the app.
 
-What follows is the exact variable/JSON shape a custom theme needs to match — the same shape the built-in themes use.
+What follows is the exact variable/JSON shape a custom theme needs to match, the same shape the built-in themes use.
 
 ### UI theme variables
 
-A UI theme is exactly these 15 CSS custom properties, declared inside a plain `:root { ... }` block — no `data-theme="..."` attribute needed, since the folder name is already the id. All 15 are required — there's no partial-override/fallback-to-default behavior today. Values shown are Coder Dark (Mocha):
+A UI theme is exactly these 15 CSS custom properties, declared inside a plain `:root { ... }` block, no `data-theme="..."` attribute needed, since the folder name is already the id. All 15 are required, there's no partial-override/fallback-to-default behavior today. Values shown are Coder Dark (Mocha):
 
 ```css
 /* ~/.coder/themes/your-theme-id/ui.css */
@@ -97,13 +97,13 @@ A UI theme is exactly these 15 CSS custom properties, declared inside a plain `:
 }
 ```
 
-The selector itself (`:root`) is never actually read — only the declarations inside `{ }` matter, the folder name is still what determines the theme's id. `:root` is just the conventional, always-valid choice so the file lints clean in any editor.
+The selector itself (`:root`) is never actually read, only the declarations inside `{ }` matter, the folder name is still what determines the theme's id. `:root` is just the conventional, always-valid choice so the file lints clean in any editor.
 
-Three layout variables (`--titlebar-height`, `--sidebar-width`, `--chat-width`) are **not** part of a theme — they're structural, shared by every palette.
+Three layout variables (`--titlebar-height`, `--sidebar-width`, `--chat-width`) are **not** part of a theme, they're structural, shared by every palette.
 
 ### Editor theme JSON
 
-An editor theme is a Monaco `IStandaloneThemeData` object — `base` (`'vs-dark'` or `'vs'`), `inherit: true`, a `rules` array of token→color mappings, and a `colors` map of editor chrome colors:
+An editor theme is a Monaco `IStandaloneThemeData` object, `base` (`'vs-dark'` or `'vs'`), `inherit: true`, a `rules` array of token→color mappings, and a `colors` map of editor chrome colors:
 
 ```json
 {
@@ -160,4 +160,4 @@ An editor theme is a Monaco `IStandaloneThemeData` object — `base` (`'vs-dark'
 }
 ```
 
-The `*.php` rules exist because Monaco's bundled PHP grammar emits its own token names (`variable.php`, `keyword.php`, etc.) instead of matching the generic ones above it — without them, PHP code falls back to plain foreground for variables, property/method names, and punctuation. Every other token type (`comment`, `keyword`, `string`, …) works across all languages via Monaco's generic Monarch token names.
+The `*.php` rules exist because Monaco's bundled PHP grammar emits its own token names (`variable.php`, `keyword.php`, etc.) instead of matching the generic ones above it, without them, PHP code falls back to plain foreground for variables, property/method names, and punctuation. Every other token type (`comment`, `keyword`, `string`, …) works across all languages via Monaco's generic Monarch token names.

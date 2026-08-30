@@ -3,33 +3,33 @@ title: Accounts & Profiles
 description: "Coder Account and OpenAI sign-in, plus separate profiles for multiple accounts (e.g. work vs personal)."
 ---
 
-Sign-in and profile controls live in the **account popover** — click the account icon in the activity bar. It shows Coder Account, OpenAI, and (if you've created more than one) your Profile.
+Sign-in and profile controls live in the **account popover**, click the account icon in the activity bar. It shows Coder Account, OpenAI, and (if you've created more than one) your Profile.
 
 ## Coder Account
 
-Signing in with your DevShed Coder account unlocks Pro/Lifetime entitlements on this device. Sign-in opens your system browser; the app resolves the flow via a `coder://auth/callback` deep link back to itself — no password is typed into the app.
+Signing in with your DevShed Coder account unlocks Pro/Lifetime entitlements on this device. Sign-in opens your system browser; the app resolves the flow via a `coder://auth/callback` deep link back to itself, no password is typed into the app.
 
 Your tier and device count are shown right in the popover. If you've signed in on more devices than your plan allows, the popover tells you which one to sign out of rather than just failing silently.
 
 ## OpenAI Account
 
-You can connect OpenAI either with a plain API key (Settings → Models) or by signing in with ChatGPT from the account popover, which uses OpenAI's own OAuth flow (a local loopback listener catches the redirect). Signing in with ChatGPT and using an API key are mutually exclusive — switching one off falls back to the other.
+You can connect OpenAI either with a plain API key (Settings → Models) or by signing in with ChatGPT from the account popover, which uses OpenAI's own OAuth flow (a local loopback listener catches the redirect). Signing in with ChatGPT and using an API key are mutually exclusive, switching one off falls back to the other.
 
 ## Multi-tenant Profiles
 
-A common problem: the same editor is used for a personal account and a work account, but only one of them comes with company-provided API keys/tokens — signing in and out constantly, or juggling one shared config, gets old fast.
+A common problem: the same editor is used for a personal account and a work account, but only one of them comes with company-provided API keys/tokens, signing in and out constantly, or juggling one shared config, gets old fast.
 
-Coder solves this with **profiles**: each profile is a completely separate, isolated install state — its own API keys, config, database/SFTP connections, and history — so "work" and "personal" (or as many accounts as you need) never see each other's secrets.
+Coder solves this with **profiles**: each profile is a completely separate, isolated install state, its own API keys, config, database/SFTP connections, and history, so "work" and "personal" (or as many accounts as you need) never see each other's secrets.
 
 ### How it works
 
 - The default profile lives at `~/.coder/`, exactly as before.
-- A named profile lives at `~/.coder-<name>/` — a full sibling directory with its own `config.json`, `keys.json`, connections, themes, everything.
+- A named profile lives at `~/.coder-<name>/`, a full sibling directory with its own `config.json`, `keys.json`, connections, themes, everything.
 - `~/.coder/profiles.json` is a small index of known profiles (name, directory, last used) so the switcher can list them without scanning disk. It always lives under the default directory, regardless of which profile is active.
 
 ### Switching profiles
 
-Each profile runs as its own app instance — switching relaunches the app rather than swapping state in a running window, so nothing tied to the old profile (open editors, terminals, LSP servers, database connections) has to be torn down live.
+Each profile runs as its own app instance, switching relaunches the app rather than swapping state in a running window, so nothing tied to the old profile (open editors, terminals, LSP servers, database connections) has to be torn down live.
 
 From the account popover's **Profile** row:
 - **Switch…** lists Default plus any profiles you've created before.
@@ -47,6 +47,6 @@ or with an environment variable:
 CODER_PROFILE=work coder
 ```
 
-A `--profile` flag takes precedence over `CODER_PROFILE` if both are set. Two profiles (including the default) can run at the same time in separate windows — each gets its own app identity under the hood, so they never collide over a shared instance lock.
+A `--profile` flag takes precedence over `CODER_PROFILE` if both are set. Two profiles (including the default) can run at the same time in separate windows, each gets its own app identity under the hood, so they never collide over a shared instance lock.
 
-<Note>Profiles isolate everything under `~/.coder-<name>/`, but don't sandbox the rest of your machine — a project you open under one profile is just as open to a project opened under another. Profiles are for separating Coder's own state (keys, config, history), not for OS-level account isolation.</Note>
+<Note>Profiles isolate everything under `~/.coder-<name>/`, but don't sandbox the rest of your machine, a project you open under one profile is just as open to a project opened under another. Profiles are for separating Coder's own state (keys, config, history), not for OS-level account isolation.</Note>
