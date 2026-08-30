@@ -69,6 +69,7 @@
 			{
 				"group": "Customization",
 				"pages": [
+					"accounts",
 					"themes",
 					"config",
 					"shortcuts"
