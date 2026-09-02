@@ -3,6 +3,8 @@ title: API Testing
 description: "Test REST APIs right in the editor, Postman-style requests as rest:// tabs, no separate app."
 ---
 
+![API Testing](media/rest.jpg)
+
 - **Test requests without leaving the editor** open a `rest://` tab, pick a method and URL, and send, response, headers, and timing show up next to the request, same as a dedicated API client but inside Coder
 - **Runs through a local Go sidecar, not the browser** requests execute in a small native process, not the renderer's fetch, no CORS restrictions and no browser-restricted headers, since a real HTTP client is making the call, not a webpage
 - **Params, Headers, and Body tabs** three sub-tabs under the URL bar hold query params, headers, and the request body; Params sync both ways with the URL, edit a row and the URL's query string updates, paste a URL with `?a=1&b=2` and Params fills in from it
