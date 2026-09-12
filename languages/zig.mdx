@@ -15,9 +15,9 @@ description: "LSP and debugger setup for Zig in Coder."
 
 | Adapter | Install | Notes |
 |---|---|---|
-| [lldb-dap](https://lldb.llvm.org/) | Ships with Xcode Command Line Tools, or `brew install llvm` | Zig binaries are natively LLDB-debuggable, so this reuses the exact same adapter as Rust. Requires a binary already built with `zig build` (default output: `zig-out/bin/<name>`) — Coder does not build it for you. |
+| [lldb-dap](https://lldb.llvm.org/) | Ships with Xcode Command Line Tools, or `brew install llvm` | Zig binaries are natively LLDB-debuggable, so this reuses the exact same adapter as Rust. Requires a binary already built with `zig build` (default output: `zig-out/bin/<name>`), Coder does not build it for you. |
 
-`brew install llvm`'s `lldb-dap` isn't linked onto `PATH` by default on macOS — you may need to add `$(brew --prefix llvm)/bin` to your `PATH`, or symlink it into `/opt/homebrew/bin`.
+`brew install llvm`'s `lldb-dap` isn't linked onto `PATH` by default on macOS, you may need to add `$(brew --prefix llvm)/bin` to your `PATH`, or symlink it into `/opt/homebrew/bin`.
 
 See [Debugger](/debugger) for the debugger UI itself.
 

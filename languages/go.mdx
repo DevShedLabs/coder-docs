@@ -11,13 +11,13 @@ description: "LSP and debugger setup for Go in Coder."
 |---|---|
 | [gopls](https://pkg.go.dev/golang.org/x/tools/gopls) | `go install golang.org/x/tools/gopls@latest` |
 
-Coder checks `~/go/bin` (Go's `go install` default) beyond a plain `PATH` lookup, since a packaged GUI app on macOS is often launched with a minimal `PATH` that doesn't match your shell's — see [Language Intelligence → Where Coder looks](/lsp#where-coder-looks).
+Coder checks `~/go/bin` (Go's `go install` default) beyond a plain `PATH` lookup, since a packaged GUI app on macOS is often launched with a minimal `PATH` that doesn't match your shell's, see [Language Intelligence → Where Coder looks](/lsp#where-coder-looks).
 
 ## Debugger
 
 | Adapter | Install | Notes |
 |---|---|---|
-| [Delve](https://github.com/go-delve/delve) (`dlv dap`) | `go install github.com/go-delve/delve/cmd/dlv@latest` | Delve compiles your program itself as part of `launch` — no separate build step needed. |
+| [Delve](https://github.com/go-delve/delve) (`dlv dap`) | `go install github.com/go-delve/delve/cmd/dlv@latest` | Delve compiles your program itself as part of `launch`, no separate build step needed. |
 
 See [Debugger](/debugger) for the debugger UI itself.
 

@@ -10,15 +10,15 @@ description: "LSP and debugger setup for Ruby in Coder."
 | [solargraph](https://solargraph.org/) (preferred) | `gem install solargraph` |
 | [ruby-lsp](https://github.com/Shopify/ruby-lsp) (fallback, used only if solargraph isn't found) | `gem install ruby-lsp` |
 
-Coder checks every installed Ruby version's `bin/` dir under `~/.rbenv/versions/*` (newest first), plus `/opt/homebrew/opt/ruby/bin`, plus RubyGems' own executable directory (queried via `gem environment gemdir`, since it's versioned by Ruby version and gem installs don't add it to `PATH`) — see [Language Intelligence → Where Coder looks](/lsp#where-coder-looks).
+Coder checks every installed Ruby version's `bin/` dir under `~/.rbenv/versions/*` (newest first), plus `/opt/homebrew/opt/ruby/bin`, plus RubyGems' own executable directory (queried via `gem environment gemdir`, since it's versioned by Ruby version and gem installs don't add it to `PATH`), see [Language Intelligence → Where Coder looks](/lsp#where-coder-looks).
 
 ### ruby-lsp gotcha: slow cold start
 
-ruby-lsp's "composed bundle" feature runs a full `bundle install`/`bundle check` plus a complete Ruby stdlib reindex on every cold start, even for a loose `.rb` file with no Gemfile. This can take 10-30+ seconds the first time (much faster once bundler's cache is warm) and looks hung with no progress indicator during that window. This is why solargraph, not ruby-lsp, is the preferred/default server despite ruby-lsp otherwise being the more actively maintained project — install ruby-lsp explicitly if you want it anyway.
+ruby-lsp's "composed bundle" feature runs a full `bundle install`/`bundle check` plus a complete Ruby stdlib reindex on every cold start, even for a loose `.rb` file with no Gemfile. This can take 10-30+ seconds the first time (much faster once bundler's cache is warm) and looks hung with no progress indicator during that window. This is why solargraph, not ruby-lsp, is the preferred/default server despite ruby-lsp otherwise being the more actively maintained project, install ruby-lsp explicitly if you want it anyway.
 
 ### solargraph gotcha: false syntax errors on modern Ruby
 
-solargraph's diagnostics run through RuboCop, which defaults `TargetRubyVersion` to an old baseline (2.7) whenever it can't find a `.rubocop.yml`/`Gemfile.lock`/`.ruby-version` to infer from — it does **not** detect your actual installed Ruby version automatically. On any project without RuboCop config, this shows real, modern syntax (keyword arguments, endless methods, pattern matching, etc.) as parse errors like `unexpected token tCOMMA`.
+solargraph's diagnostics run through RuboCop, which defaults `TargetRubyVersion` to an old baseline (2.7) whenever it can't find a `.rubocop.yml`/`Gemfile.lock`/`.ruby-version` to infer from, it does **not** detect your actual installed Ruby version automatically. On any project without RuboCop config, this shows real, modern syntax (keyword arguments, endless methods, pattern matching, etc.) as parse errors like `unexpected token tCOMMA`.
 
 Fix by adding a `.rubocop.yml` to the project root:
 ```yaml
@@ -28,7 +28,7 @@ AllCops:
 
 ### solargraph gotcha: noisy style diagnostics once the version is fixed
 
-With `TargetRubyVersion` set, RuboCop's full default cop set runs at normal strictness — every string-quote preference, missing class doc comment, and naming nitpick shows up in the Problems panel. This is expected RuboCop behavior on a project with no config of its own, not a bug; if you prefer stricter style enforcement, leave it as-is. If you want correctness/lint checks without the style opinions, disable the `Style` department:
+With `TargetRubyVersion` set, RuboCop's full default cop set runs at normal strictness, every string-quote preference, missing class doc comment, and naming nitpick shows up in the Problems panel. This is expected RuboCop behavior on a project with no config of its own, not a bug; if you prefer stricter style enforcement, leave it as-is. If you want correctness/lint checks without the style opinions, disable the `Style` department:
 ```yaml
 AllCops:
   TargetRubyVersion: 3.3
@@ -36,19 +36,19 @@ AllCops:
 Style:
   Enabled: false
 ```
-Or disable individual cops (e.g. `Style/StringLiterals`, `Style/Documentation`) to keep some style checks and drop others — see [RuboCop's cop reference](https://docs.rubocop.org/rubocop/cops.html).
+Or disable individual cops (e.g. `Style/StringLiterals`, `Style/Documentation`) to keep some style checks and drop others, see [RuboCop's cop reference](https://docs.rubocop.org/rubocop/cops.html).
 
 ### solargraph gotcha: "Required path X could not be resolved" for `require 'set'` (and similar)
 
-`Set`, along with a few other libraries, moved from Ruby's stdlib into Ruby *core* as of 3.2 — no `require` is needed for it anymore, and RuboCop correctly flags the `require 'set'` line itself as `Lint/RedundantRequireStatement`. solargraph 0.60.4's own `RequireNotFound` diagnostic, however, only checks its stdlib RBS index when resolving `require` paths, not the core one — so it can never find `set` there and always reports it unresolved, independent of the RuboCop warning.
+`Set`, along with a few other libraries, moved from Ruby's stdlib into Ruby *core* as of 3.2, no `require` is needed for it anymore, and RuboCop correctly flags the `require 'set'` line itself as `Lint/RedundantRequireStatement`. solargraph 0.60.4's own `RequireNotFound` diagnostic, however, only checks its stdlib RBS index when resolving `require` paths, not the core one, so it can never find `set` there and always reports it unresolved, independent of the RuboCop warning.
 
-There's no config fix for this one (it's a solargraph gap, not a project setting): the actual fix is to delete the now-unnecessary `require` line, which resolves both warnings at once. `require 'json'` is unaffected — `json` is still a genuine separate stdlib gem, not moved into core.
+There's no config fix for this one (it's a solargraph gap, not a project setting): the actual fix is to delete the now-unnecessary `require` line, which resolves both warnings at once. `require 'json'` is unaffected, `json` is still a genuine separate stdlib gem, not moved into core.
 
 ## Debugger
 
 | Adapter | Install | Notes |
 |---|---|---|
-| [rdbg](https://github.com/ruby/debug) (`rdbg --stdio`) | Ships with Ruby 3.1+'s bundled `debug` gem, or `gem install debug` | Pure stdio DAP, no separate build step — rdbg runs your script directly. |
+| [rdbg](https://github.com/ruby/debug) (`rdbg --stdio`) | Ships with Ruby 3.1+'s bundled `debug` gem, or `gem install debug` | Pure stdio DAP, no separate build step, rdbg runs your script directly. |
 
 See [Debugger](/debugger) for the debugger UI itself.
 

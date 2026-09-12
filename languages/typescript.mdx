@@ -11,7 +11,7 @@ description: "LSP and debugger setup for TypeScript and JavaScript in Coder."
 |---|---|
 | [typescript-language-server](https://github.com/typescript-language-server/typescript-language-server) | `npm install -g typescript-language-server typescript` |
 
-**The one exception to "nothing is bundled."** `typescript-language-server` needs a real TypeScript install to run against and has none of its own — it happily uses a project's own `node_modules/typescript` when present, but a plain JS-only folder with no `package.json` has nothing for it to find. Coder ships its own copy of `tsserver.js` as a last-resort fallback, used strictly *after* checking for (and not finding) a workspace-local install, so a project pinning its own TypeScript version is never overridden by Coder's bundled copy.
+**The one exception to "nothing is bundled."** `typescript-language-server` needs a real TypeScript install to run against and has none of its own, it happily uses a project's own `node_modules/typescript` when present, but a plain JS-only folder with no `package.json` has nothing for it to find. Coder ships its own copy of `tsserver.js` as a last-resort fallback, used strictly *after* checking for (and not finding) a workspace-local install, so a project pinning its own TypeScript version is never overridden by Coder's bundled copy.
 
 ## Debugger
 

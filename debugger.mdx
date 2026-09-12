@@ -23,7 +23,7 @@ The debugger connects to debug adapters you have installed, none of them ship wi
 See [Language Intelligence → DAP, debuggers](/lsp#dap-debuggers) for the general picture, and each language's own page for its adapter's exact install steps and gotchas:
 [PHP](/languages/php) · [TypeScript / JavaScript](/languages/typescript) · [Go](/languages/go) · [Rust](/languages/rust) · [Zig](/languages/zig) · [Python](/languages/python) · [Swift](/languages/swift) · [C / C++](/languages/cpp) · [Ruby](/languages/ruby)
 
-Most compiled languages (Rust, Zig, Swift, C/C++) share the same `lldb-dap` setup (ships with the Xcode Command Line Tools via `xcode-select --install`, or `brew install llvm`) and require a binary you've already built (`cargo build` / `zig build` / `swift build` / your C compiler) — the debugger doesn't invoke any of those build tools for you.
+Most compiled languages (Rust, Zig, Swift, C/C++) share the same `lldb-dap` setup (ships with the Xcode Command Line Tools via `xcode-select --install`, or `brew install llvm`) and require a binary you've already built (`cargo build` / `zig build` / `swift build` / your C compiler), the debugger doesn't invoke any of those build tools for you.
 
 ## Debugger Reports
 ![Debugger report](media/debugger-report.jpg)
