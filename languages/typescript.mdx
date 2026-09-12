@@ -1,0 +1,26 @@
+---
+title: TypeScript / JavaScript
+description: "LSP and debugger setup for TypeScript and JavaScript in Coder."
+---
+
+![TypeScript LSP](/media/TypeScript.jpg)
+
+## Language server
+
+| Server | Install |
+|---|---|
+| [typescript-language-server](https://github.com/typescript-language-server/typescript-language-server) | `npm install -g typescript-language-server typescript` |
+
+**The one exception to "nothing is bundled."** `typescript-language-server` needs a real TypeScript install to run against and has none of its own — it happily uses a project's own `node_modules/typescript` when present, but a plain JS-only folder with no `package.json` has nothing for it to find. Coder ships its own copy of `tsserver.js` as a last-resort fallback, used strictly *after* checking for (and not finding) a workspace-local install, so a project pinning its own TypeScript version is never overridden by Coder's bundled copy.
+
+## Debugger
+
+| Adapter | Install | Notes |
+|---|---|---|
+| [js-debug-adapter](https://github.com/microsoft/vscode-js-debug) (or plain `node`) | Ships with VS Code, or `npm install -g @vscode/js-debug` | |
+
+See [Debugger](/debugger) for the debugger UI itself.
+
+## Tested on
+
+macOS (Apple Silicon). Windows and Linux paths aren't documented yet.

@@ -1,0 +1,23 @@
+---
+title: Python
+description: "LSP and debugger setup for Python in Coder."
+---
+
+## Language server
+
+| Server | Install |
+|---|---|
+| [pyright](https://microsoft.github.io/pyright/) (preferred) | `npm install -g pyright` |
+| [python-lsp-server](https://github.com/python-lsp/python-lsp-server) (fallback, used only if pyright isn't found) | `pip install python-lsp-server` |
+
+## Debugger
+
+| Adapter | Install | Notes |
+|---|---|---|
+| `python3 -m debugpy.adapter` | `pip install debugpy` | |
+
+See [Debugger](/debugger) for the debugger UI itself.
+
+## Tested on
+
+macOS (Apple Silicon). Windows and Linux paths aren't documented yet.

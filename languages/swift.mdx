@@ -1,0 +1,26 @@
+---
+title: Swift
+description: "LSP and debugger setup for Swift in Coder."
+---
+
+![Swift LSP](/media/Swift.jpg)
+
+## Language server
+
+| Server | Install |
+|---|---|
+| [sourcekit-lsp](https://github.com/swiftlang/sourcekit-lsp) | Ships with Xcode / the Swift toolchain |
+
+## Debugger
+
+| Adapter | Install | Notes |
+|---|---|---|
+| [lldb-dap](https://lldb.llvm.org/) | Ships with Xcode Command Line Tools, or `brew install llvm` | Swift binaries are natively LLDB-debuggable, so this reuses the exact same adapter as Rust/Zig. Requires a binary already built with `swift build` — Coder does not build it for you. |
+
+`brew install llvm`'s `lldb-dap` isn't linked onto `PATH` by default on macOS — you may need to add `$(brew --prefix llvm)/bin` to your `PATH`, or symlink it into `/opt/homebrew/bin`.
+
+See [Debugger](/debugger) for the debugger UI itself.
+
+## Tested on
+
+macOS (Apple Silicon). Swift tooling is Apple-platform-first; Linux support depends on the Swift toolchain's own Linux build, not documented here yet.

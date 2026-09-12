@@ -1,0 +1,30 @@
+---
+title: Rust
+description: "LSP and debugger setup for Rust in Coder."
+---
+
+![Rust LSP](/media/Rust.jpg)
+
+## Language server
+
+| Server | Install |
+|---|---|
+| [rust-analyzer](https://rust-analyzer.github.io/) | `rustup component add rust-analyzer` |
+
+Coder checks `~/.cargo/bin` (rustup's default) beyond a plain `PATH` lookup, since a packaged GUI app on macOS is often launched with a minimal `PATH` that doesn't match your shell's — see [Language Intelligence → Where Coder looks](/lsp#where-coder-looks).
+
+**rust-analyzer gotcha:** `~/.cargo/bin/rust-analyzer` is actually a symlink to the `rustup` proxy, not the real binary. If `rustup component add rust-analyzer` was never run (or was run against a different toolchain than your active one), Coder still *finds* something at that path, spawns it, and you'll see `error: Unknown binary 'rust-analyzer' in official toolchain '...'` in the LSP log instead of a "not found" message. Run `rustup which rust-analyzer` to confirm it resolves to a real path under `~/.rustup/toolchains/.../bin/`, not just that the symlink exists.
+
+## Debugger
+
+| Adapter | Install | Notes |
+|---|---|---|
+| [lldb-dap](https://lldb.llvm.org/) (formerly `lldb-vscode`) | Ships with Xcode Command Line Tools, or `brew install llvm` | Requires a binary already built with `cargo build` — Coder does not build it for you. |
+
+`brew install llvm`'s `lldb-dap` isn't linked onto `PATH` by default on macOS — you may need to add `$(brew --prefix llvm)/bin` to your `PATH`, or symlink it into `/opt/homebrew/bin`.
+
+See [Debugger](/debugger) for the debugger UI itself.
+
+## Tested on
+
+macOS (Apple Silicon). Windows and Linux paths aren't documented yet.

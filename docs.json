@@ -38,7 +38,22 @@
 					"orchestrator",
 					"tokens",
 					"reports",
-					"lsp",
+					{
+						"group": "Language Intelligence (LSP)",
+						"pages": [
+							"lsp",
+							"languages/php",
+							"languages/typescript",
+							"languages/html-css",
+							"languages/go",
+							"languages/rust",
+							"languages/zig",
+							"languages/python",
+							"languages/swift",
+							"languages/cpp",
+							"languages/ruby"
+						]
+					},
 					"debugger",
 					"terminal",
 					"search",
