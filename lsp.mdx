@@ -34,8 +34,14 @@ If a language server or debug adapter isn't found, that language still gets full
 | Zig | [zls](https://github.com/zigtools/zls) | `brew install zls` |
 | Python | [pyright](https://microsoft.github.io/pyright/) (preferred) | `npm install -g pyright` |
 | Python | [python-lsp-server](https://github.com/python-lsp/python-lsp-server) (fallback, used only if pyright isn't found) | `pip install python-lsp-server` |
+| Swift | [sourcekit-lsp](https://github.com/swiftlang/sourcekit-lsp) | Ships with Xcode / the Swift toolchain |
+| C / C++ | [clangd](https://clangd.llvm.org/) | `brew install llvm` |
+| Ruby | [ruby-lsp](https://github.com/Shopify/ruby-lsp) (preferred) | `gem install ruby-lsp` |
+| Ruby | [solargraph](https://solargraph.org/) (fallback, used only if ruby-lsp isn't found) | `gem install solargraph` |
 
 **rust-analyzer gotcha:** `~/.cargo/bin/rust-analyzer` is actually a symlink to the `rustup` proxy, not the real binary, if `rustup component add rust-analyzer` was never run (or was run against a different toolchain than your active one), Coder still *finds* something at that path, spawns it, and you'll see `error: Unknown binary 'rust-analyzer' in official toolchain '...'` in the LSP log instead of a "not found" message. Run `rustup which rust-analyzer` to confirm it resolves to a real path under `~/.rustup/toolchains/.../bin/`, not just that the symlink exists.
+
+**clangd gotcha:** `brew install llvm` is keg-only, it doesn't link `clangd` onto `PATH`. Coder checks `/opt/homebrew/opt/llvm/bin` (Apple Silicon) and `/usr/local/opt/llvm/bin` (Intel) directly, so no `PATH` changes are needed. For accurate diagnostics on anything beyond a single file, clangd also needs a `compile_commands.json` in the project root, generate one via CMake (`-DCMAKE_EXPORT_COMPILE_COMMANDS=ON`) or `bear`/`compiledb` for Makefile-based projects.
 
 **TypeScript is the one exception to "nothing is bundled."** `typescript-language-server` needs a real TypeScript install to run against and has none of its own, it happily uses a project's own `node_modules/typescript` when present, but a plain JS-only folder with no `package.json` has nothing for it to find. Coder ships its own copy of `tsserver.js` as a last-resort fallback, used strictly *after* checking for (and not finding) a workspace-local install, so a project pinning its own TypeScript version is never overridden by Coder's bundled copy.
 
@@ -48,6 +54,7 @@ Beyond a plain `PATH` lookup, Coder also checks these locations, since a package
 - `~/.local/bin`, `~/.composer/vendor/bin`, `~/.config/composer/vendor/bin`
 - `/opt/homebrew/bin`, `/usr/local/bin`
 - Every installed Node version's `bin/` dir under `~/.nvm/versions/node/*` (newest first), covers globally-installed npm-based servers (intelephense, the vscode-langservers-extracted family, typescript-language-server) even under nvm
+- Every installed Ruby version's `bin/` dir under `~/.rbenv/versions/*` (newest first), plus `~/.gem/ruby/bin` and `/opt/homebrew/opt/ruby/bin`, covers gem-installed servers (ruby-lsp, solargraph) under rbenv or a plain Homebrew Ruby
 
 Coder also tries to resolve your real login-shell `PATH` directly (via `$SHELL -lic`) before falling back to the list above, so most shell-managed installs (nvm, volta, asdf, etc.) are found without needing any of this.
 
@@ -63,6 +70,9 @@ See [Debugger](/debugger) for the debugger UI itself.
 | Zig | [lldb-dap](https://lldb.llvm.org/) | Same as Rust | Zig binaries are natively LLDB-debuggable, so this reuses the exact same adapter as Rust. Requires a binary already built with `zig build` (default output: `zig-out/bin/<name>`), Coder does not build it for you. |
 | Python | `python3 -m debugpy.adapter` | `pip install debugpy` | |
 | PHP | [vscode-php-debug](https://github.com/xdebug/vscode-php-debug) (Xdebug) | Install the `xdebug.php-debug` VS Code/Cursor extension, plus the [Xdebug](https://xdebug.org/) PHP extension itself | Coder looks for the extension under `~/.vscode/extensions`, `~/.cursor/extensions`, and Cursor's macOS Application Support path. |
+| Swift | [lldb-dap](https://lldb.llvm.org/) | Ships with Xcode Command Line Tools, or `brew install llvm` | Swift binaries are natively LLDB-debuggable, so this reuses the exact same adapter as Rust/Zig. Requires a binary already built with `swift build`, Coder does not build it for you. |
+| C / C++ | [lldb-dap](https://lldb.llvm.org/) | Ships with Xcode Command Line Tools, or `brew install llvm` | Same adapter as Rust/Zig/Swift. Requires a binary already built with debug symbols (`gcc`/`clang -g`), Coder does not build it for you, and there's no standard output path to guess, so point "Program" at your binary directly. |
+| Ruby | [rdbg](https://github.com/ruby/debug) (`rdbg --stdio`) | Ships with Ruby 3.1+'s bundled `debug` gem, or `gem install debug` | Pure stdio DAP, no separate build step, rdbg runs your script directly. |
 
 `brew install llvm`'s `lldb-dap` isn't linked onto `PATH` by default, you may need to add `$(brew --prefix llvm)/bin` to your `PATH`, or symlink it into `/opt/homebrew/bin`.
 
