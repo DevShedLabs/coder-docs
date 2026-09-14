@@ -1,0 +1,51 @@
+---
+title: Workspaces & Worktrees
+description: "Open more than one folder at once, and create git worktrees to work multiple branches side by side — all in one window."
+---
+
+A **workspace** is the set of folders open in the current window: your primary project, plus any additional roots you've added — a git worktree, or any other folder on disk. Each root gets its own section in the file tree, its own file watcher, and (for supported languages) its own language server connection, so files in different roots never interfere with each other.
+
+Most projects only ever have one root, and behave exactly as before. Workspaces only come into play once you add a second one.
+
+## Adding a root
+
+- **Add Folder to Workspace** — the `+` button at the top of the file tree next to New File/New Folder lets you attach any folder on disk as an additional root. It appears as its own collapsible section immediately, no reload needed.
+- **Create a worktree** — see below. A new worktree attaches to the workspace the same way, automatically.
+- Every additional root is remembered per-project and reattaches automatically the next time you open it.
+
+To remove a root, click the trash icon in its section header. This detaches it from the workspace — for a worktree, it does **not** delete the worktree from disk (use the Worktrees panel's own remove action for that, see below).
+
+## Git worktrees
+
+A git worktree is a second working copy of the same repository, checked out on its own branch, in its own folder — so you can work a feature branch without touching the files you already have open, or run something on `main` while a fix is in progress elsewhere.
+
+### Creating a worktree
+
+Open the **Git panel** on a repo and find the **Worktrees** section below the branch banners:
+
+- Click the `+` icon to open **Create worktree**
+- Pick or create a branch (checking the "New branch" box creates one fresh, optionally from a chosen starting point)
+- Confirm or edit the location — defaults to a sibling folder next to your repo, e.g. `my-repo-feature-x`, but you can type your own path or use **Browse…** to pick a different parent folder
+- Click **Create worktree**
+
+The new worktree attaches to the workspace immediately and appears as its own section in the file tree, labeled with its branch name.
+
+### Managing worktrees
+
+- The Worktrees section lists every worktree for that repo (except the repo's own main checkout)
+- Click the ✕ next to one and click again to confirm — this detaches it from the workspace and runs `git worktree remove`
+- The refresh icon runs `git worktree prune`, cleaning up worktree entries whose folders were deleted outside the app
+
+### From AI chat
+
+You can also ask the AI agent to create a worktree for you — it has a `create_worktree` tool and will pick a sensible branch name and location, or use ones you specify. This is a good way to run more than one chat session in parallel, each working its own branch without stepping on the other's files.
+
+## Terminals
+
+New terminals open rooted in whichever workspace root is focused. Each root's file tree section also has its own **New Terminal Here** button, so you can open a shell directly in a worktree or added folder regardless of what's currently focused. When more than one root is open, terminal tabs show a small badge naming which root they belong to.
+
+## Git status per root
+
+The Git panel and the file tree's dirty-file badges track every repo across every open root — not just the primary one. Adding or removing a root refreshes the repo list automatically.
+
+<Info>Worktrees need a git repository. Creating one requires the currently open project (or the repo you're viewing in the Git panel) to already be a repo.</Info>

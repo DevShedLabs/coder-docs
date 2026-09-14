@@ -58,6 +58,7 @@
 					"terminal",
 					"search",
 					"git",
+					"workspaces",
 					"tickets",
 					"pr-management"
 				]
