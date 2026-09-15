@@ -18,3 +18,51 @@ description: "Progressive-disclosure instructions the agent loads on demand, sha
     templates/
       foo.md          # bundled files can be nested in subfolders
 ```
+
+## Built-in skills
+
+Coder ships with a small set of default skills, seeded into `~/.coder/skills/` on first launch:
+
+| Skill | Purpose |
+|---|---|
+| `engineering` | Universal coding standards (SOLID, DRY, YAGNI, lint-before-merge, one test per feature, 300-line file cap) plus per-language reference files — `PHP.md`, `Go.md`, `TypeScript.md`, `JavaScript.md`, `React.md`, `Electron.md`, `Rust.md`, `Python.md` — linked from the skill body and fetched on demand with `read_skill_file`. |
+| `design` | Guidance for building or reviewing any web UI, independent of CSS framework (Tailwind, Bootstrap, plain CSS, etc). |
+| `math-formulas` | When to render LaTeX math via KaTeX instead of ASCII approximations, in chat, markdown, kanban cards, or mindmap labels. |
+| `mermaid-mindmap` | How to create/edit a `.mindmap.md` file that Coder renders as an interactive canvas. |
+| `create-skill` | Walks the user through authoring a new skill. Not model-invocable on its own (`disable-model-invocation: true`) — it's a guided workflow, not something the agent reaches for mid-task. |
+
+These stay in sync with the [`coder-skills`](https://github.com/DevShedLabs/coder-skills) repo — a periodic and manual sync keeps `~/.coder/skills/` current as new default skills are added there.
+
+### Adding a built-in skill for code quality or a Coder feature
+
+The `coder-skills` repo is where a new default skill is authored before it ships. Two categories worth knowing about when deciding whether something belongs there:
+
+- **Code-quality skills** — e.g. `lint`, which dispatches to the real linter per language (ESLint, PHPStan, golangci-lint, Clippy, RuboCop) rather than approximating one tool's rules with another. These matter most when a user asks the agent to "scope a new project" — a good default skill here means the agent reaches for the real tool with a sane starter config instead of guessing.
+- **Coder-feature skills** — teaching the agent to use a capability specific to this app (e.g. writing a `.mindmap.md`, generating LaTeX for KaTeX rendering). Skip this path for anything the agent should have access to *unconditionally* rather than only when a task matches a skill description — see the docs-tool note below.
+
+## Custom overrides
+
+A user (or the Orchestrator) can fork any built-in skill without losing future updates to it. The convention is a sibling directory prefixed `custom-`:
+
+```
+~/.coder/skills/
+  engineering/          # shipped copy — kept in sync automatically
+    SKILL.md
+  custom-engineering/    # user's fork — wins whenever both exist
+    SKILL.md
+```
+
+- **First edit forks automatically.** Editing a pristine shipped skill in the Prompts panel deep-copies it to `custom-<name>` and the original underneath is left untouched as the sync target — you never edit the shipped copy directly.
+- **The custom directory always wins.** Both the model's `use_skill` lookup and the Skills sidebar resolve `<name>` to `custom-<name>` when it exists; nothing else needs to know a fork exists.
+- **Sync respects the fork.** A background/manual sync from `coder-skills` only updates the shipped copy underneath a fork, never the `custom-` directory — your edits are never overwritten by an upstream change. If you create a brand-new skill whose name collides with one newly added upstream, the sync skips it rather than overwriting your work.
+- **A skill you create fresh** (no built-in with that name) is just a plain `~/.coder/skills/<name>/` directory — the `custom-` prefix only matters for overriding something built-in.
+
+## How the model sees skills
+
+Two tool tiers, modeled on Claude Code's own skill system:
+
+1. **Listing (always in context)** — every skill's `name` + `description`, one line each, injected into the system prompt. Both built-in and custom skills are included, already collapsed to whichever one wins per the override rule above — the model never sees "shipped vs custom," only the winning name and description.
+2. **`use_skill({name})`** — loads the full `SKILL.md` body (frontmatter stripped) on demand, once the model decides a skill's description matches the task at hand.
+3. **`read_skill_file({skill_name, path})`** — fetches a bundled reference file a skill body links to (e.g. `engineering`'s `PHP.md`). Read-only: a skill can bundle a script or template, but the agent can only read it, never execute it — if a skill needs a command run, its `SKILL.md` should instruct the agent to run that command directly via its normal tools, not rely on a bundled script being executable.
+
+Capabilities that should be available to the agent on every task — not gated behind a skill description matching — aren't modeled as skills at all. Coder's own docs (`list_docs`/`read_doc`) are the example: always-on tools, not something the agent has to guess it should reach for.
