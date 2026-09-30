@@ -17,16 +17,22 @@ The editor itself, tabs, split views, syntax/semantic highlighting, and language
 - **Many tab kinds share the strip**, regular files, Markdown preview, diffs, terminals, the debug console, browser preview, CSV/TSV grids, mindmap source/canvas, images, DB tables, and remote/SFTP files each get their own icon and, where relevant, distinct styling.
 - **Remote files ask before closing dirty**, closing a dirty SFTP tab prompts for confirmation, since a lost edit against a live server is riskier than a lost local edit. Local files close silently.
 
-## Split editor groups
+## Split editor groups (grid layout)
 
-Coder supports up to **5 side-by-side editor groups**, each an independent column of tabs.
+Coder's editor area is a true grid, up to **5 panes total**, split along any of three axes:
 
-- **Split** `Cmd+\` toggles between one and two groups; the split button (`⊞`) on a tab strip adds a group to the right (disabled once you hit 5).
-- **Shared buffers** the same file opened in two groups shares one underlying model, edit it in one pane and the other updates live, rather than holding two independent copies.
-- **Resizing** drag the divider between any two groups; widths are clamped between 200px and 80% of the window.
-- **Closing a group** (`⊟` on the tab strip) is blocked on the last remaining group; any terminal that only lived in that group has its process killed rather than orphaned.
-- **Focus** click anywhere in a pane to make it active; inactive panes mute their tab strip so it's obvious which one has focus.
-- Terminals, diffs, Markdown preview, the debug console, browser preview, and the mindmap canvas can each only live in one pane at a time (they hold a single PTY or webview), splitting *moves* these instead of cloning them.
+- **Columns** side by side, left to right. `Cmd+\` (the `⊞` button) adds a new full-height column to the right of the active one.
+- **Stacked rows** within a column, top to bottom, e.g. a tall Claude Code terminal above two shorter command terminals. `Cmd+Shift+\` (the stacked-rectangle button) splits the active pane into a new row below it, confined to that column, up to 3 rows deep.
+- **Sub-panes** side by side within a single row, confined to that row's height. The row-split button (the short side-by-side rectangle icon) splits the active pane into a new sub-pane beside it, up to 3 per row, without touching the rest of the column's stack.
+
+A pane can be a column, a row within a stacked column, or a sub-pane within a row, nesting stops there; a sub-pane can't itself be split further.
+
+- **Shared buffers** the same file opened in two panes shares one underlying model, edit it in one pane and the other updates live, rather than holding two independent copies.
+- **Resizing** drag any divider, between columns, between stacked rows, or between sub-panes in a row. Widths/heights are clamped to a sane minimum and persisted per-pane.
+- **Closing a pane** (`×` on the tab strip) is blocked on the last remaining pane; any terminal that only lived in that pane has its process killed rather than orphaned. Closing one pane of a stack or row moves focus to a sibling in the same row, then the same column, before falling back further away.
+- **Focus** click anywhere in a pane to make it active; inactive panes mute their tab strip so it's obvious which one has focus. `Cmd+Shift+Arrow` moves focus between panes in the direction pressed, left/right first steps through sub-panes within the current row before crossing into the next column, up/down steps through a column's stacked rows, and landing in a pane immediately focuses its content (the Monaco cursor for a file, or the terminal's input for a shell), so you can keep typing without an extra click.
+- Terminals, diffs, Markdown preview, the debug console, browser preview, and the mindmap canvas can each only live in one pane at a time (they hold a single PTY or webview); splitting *moves* these instead of cloning them, leaving the new pane with the welcome screen.
+- **Persisted** the full grid shape, columns, stacked rows, and sub-panes, survives a reload or restart, including which pane a still-alive terminal was in across a same-session reload. Terminal *processes* don't survive a full quit, since they're not saved to disk, but the pane they lived in comes back empty and ready for a new one.
 
 ## File tree
 
@@ -67,7 +73,7 @@ Typing `/**` above a function and pressing Enter auto-continues the block with `
 
 **Settings → Editor**: indent size (2/4 spaces), indent style (spaces/tabs), format on save.
 
-## Shotcut Key Commands
+## Shortcut Key Commands
 
 | Shortcut | Action |
 |---|---|
@@ -76,8 +82,10 @@ Typing `/**` above a function and pressing Enter auto-continues the block with `
 | Cmd+L | Format document |
 | Cmd+D | Duplicate line |
 | Cmd+F | Find in file |
-| Cmd+\ | Toggle split view |
-| Cmd+Shift+→ / ← | Next / previous tab (within the active group) |
+| Cmd+\ | Split editor right (new column) |
+| Cmd+Shift+\ | Split pane down (new stacked row) |
+| Cmd+Shift+] / [ | Next / previous tab (within the active pane) |
+| Cmd+Shift+Arrow | Focus the adjacent pane (left/right/up/down through the grid) |
 | Cmd+Shift+I | Open diff for active file |
 | Cmd+Shift+V | Preview Markdown / Open HTML in browser |
 | Cmd+Shift+X | Open Mindmap canvas tab |

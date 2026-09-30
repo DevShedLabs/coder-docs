@@ -20,10 +20,17 @@ description: "The full keyboard shortcut reference."
 ### Tabs
 | Shortcut | Action |
 |---|---|
-| Cmd+Shift+→ | Next tab |
-| Cmd+Shift+← | Previous tab |
+| Cmd+Shift+] | Next tab (within the active pane) |
+| Cmd+Shift+[ | Previous tab (within the active pane) |
 | Cmd+Shift+W | Close all tabs (spares pinned + terminals) |
 | Cmd+T | New terminal tab |
+
+### Editor grid
+| Shortcut | Action |
+|---|---|
+| Cmd+\ | Split editor right (new column) |
+| Cmd+Shift+\ | Split pane down (new stacked row within the column) |
+| Cmd+Shift+Arrow | Focus the adjacent pane (left/right through sub-panes then columns, up/down through a column's stacked rows) |
 
 ### Panels
 | Shortcut | Action |
@@ -52,7 +59,6 @@ description: "The full keyboard shortcut reference."
 | Cmd+B | Git: create branch |
 | Cmd+Shift+C | Clone repository |
 | Cmd+Shift+U | Create worktree |
-| Cmd+\ | Add editor split (up to 5 panes) |
 | Cmd+Shift+B | Open full Kanban board |
 | Cmd+Shift+M | Open Master Board |
 | Cmd+Shift+I | Open diff for active file |
@@ -75,4 +81,4 @@ All shortcuts are remappable in Settings → Keybindings.
 - **Tab management** pinnable tabs, drag-to-reorder, dirty indicators; pinned and terminal tabs survive "close all"
 - **Status bar** git branch + dirty count, active file path, context window meter, and context actions
 - **Recent projects** welcome screen lists recently opened projects; click to reopen
-- **Per-project state** open tabs, active tab, and tree expansion state restored on every reopen
+- **Per-project state** open tabs, active tab, tree expansion state, and the full editor grid layout (columns, stacked rows, sub-panes) restored on every reopen
