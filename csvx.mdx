@@ -40,6 +40,8 @@ The agent has four tools for `.csvx` files and uses them instead of the plain fi
 | `csvx_edit` | Applies a batch of edits: set cells and formulas, clear, format, insert/delete rows and columns, manage sheets, print settings |
 | `csvx_convert` | Imports CSV/XLSX into a `.csvx`, or exports to XLSX or CSV |
 
+The agent also has a built-in **`csvx` skill** that it loads on demand. It teaches the CSVX rules that trip models up: only five formula functions exist (`SUM`, `COUNT`, `IF`, `ROUND`, `ABS`), numbers must be plain digits rather than `$5` or `1,000`, and how to check its own work by reading back the cells it changed.
+
 Things you can ask for:
 
 - "Convert `Q3-report.xlsx` to CSVX and tell me what's in it"
