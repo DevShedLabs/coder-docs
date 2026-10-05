@@ -67,6 +67,7 @@
 				"group": "Data & Files",
 				"pages": [
 					"databases",
+					"csvx",
 					"api-testing",
 					"sftp",
 					"livereload",

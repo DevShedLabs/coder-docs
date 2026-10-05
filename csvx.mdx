@@ -1,0 +1,66 @@
+---
+title: CSVX Spreadsheets
+description: "Open, edit, calculate, format, print and convert spreadsheets in the CSVX format, by hand or with the AI."
+---
+
+CSVX is an open spreadsheet format built for developers: **the data is plain CSV and everything else is JSON**, zipped into one `.csvx` file. Values, formulas, styles and print settings are stored as readable text, so a workbook diffs cleanly, scripts can work on it, and the AI can read and edit it without a plugin or a special server.
+
+- **Opens like any file** double-click a `.csvx` in the file tree and it opens as a spreadsheet tab (and comes back as one after a reload)
+- **Import CSV and Excel** right-click a `.csv`, `.tsv` or `.xlsx` and choose **Convert to CSVX**; a new `.csvx` appears next to it and your original is never touched. An imported XLSX is embedded inside the package, so nothing is lost
+- **Export** right-click a `.csvx` and choose **Export as XLSX…**. A workbook you never edited exports the original Excel file byte-for-byte; an edited one is written from its current content
+- **Live saving** edits save automatically a moment after you stop (switch **Auto-save** off in the toolbar to save by hand with ⌘S). The tab shows a dot while there are unsaved edits, and if the file changes on disk while you have unsaved edits, Coder warns instead of silently overwriting either side
+
+## Editing
+
+- **Cells** double-click, press Enter or F2, or just start typing. Enter and Tab move on, Escape cancels. Text beginning with `=` is a formula
+- **Formulas** calculate as you type, across sheets (`=Sales!C2`), and update everything that depends on them. Cells with a formula show a small corner marker; hover one to see its formula
+- **Selecting** click and drag cells; click or drag across row numbers or column letters to select whole rows and columns; ⇧-click extends and ⌘/Ctrl-click adds a separate range. Dragging past the edge scrolls
+- **Rows and columns** right-click a row number or column letter to insert above/below or delete; with several selected it acts on all of them, and formula references shift to follow. Drag a column's right edge to resize it
+- **Copy and paste** ⌘C, ⌘X, ⌘V use ordinary tab-separated text, so they work with Google Sheets and Excel. Pasting past the edge grows the sheet
+- **Undo and redo** ⌘Z and ⇧⌘Z
+- **Sheets** the tabs along the bottom add, rename (double-click) and delete sheets
+- **Always a full grid** every sheet is shown as at least columns A–Z and 100 rows. The blank padding is only a view: it is never written to the file, and typing into it adds those cells for real
+
+## Formatting
+
+The toolbar has bold, italic, underline, alignment, currency, text color, fill color, border color, text case and clear formatting. The three color tools show the color currently applied. Formatting applies to the whole selection, including separate ranges, and works on blank cells too.
+
+## Printing
+
+The print button opens a Google-Sheets-style print view with a live preview of the real pages: orientation, paper size, scale (custom or fit to width, height or page), margins, page order, gridlines, centering, a print area, and rows or columns to repeat on every page. **Print…** opens the system print dialog; **Save PDF…** writes a PDF. The settings are saved in the workbook.
+
+## Using the AI with spreadsheets
+
+The agent has four tools for `.csvx` files and uses them instead of the plain file tools (which would corrupt a ZIP):
+
+| Tool | What it does |
+| --- | --- |
+| `csvx_info` | Summarizes a workbook: sheets, sizes, column headers, source file, problems |
+| `csvx_read` | Reads cells as displayed, with their formulas, in capped windows |
+| `csvx_edit` | Applies a batch of edits: set cells and formulas, clear, format, insert/delete rows and columns, manage sheets, print settings |
+| `csvx_convert` | Imports CSV/XLSX into a `.csvx`, or exports to XLSX or CSV |
+
+Things you can ask for:
+
+- "Convert `Q3-report.xlsx` to CSVX and tell me what's in it"
+- "Add a Total column to the Sales sheet and a Summary sheet that adds up each region"
+- "Bold the header row, shade it light blue, and format the Price column as currency"
+- "Find the rows where Margin is negative and list them"
+- "Export the Summary sheet as CSV"
+
+How it behaves:
+
+- **You see it happen** if the workbook is open in a tab, the agent edits that same live copy, so changes appear as it works and ⌘Z undoes a whole batch in one step
+- **All or nothing** a batch of edits is checked as a whole; if any edit is invalid, nothing changes and the AI is told which edit failed and why
+- **Saved immediately** like the agent's other file tools, edits are written to disk right away
+- **Stays inside your project** the tools only reach files in the open project, never elsewhere on your machine, and exports never overwrite an existing file
+- **Plan mode** can look (`csvx_info`, `csvx_read`) but not change anything
+
+To make a brand-new spreadsheet, ask the AI to write the data as a `.csv` and convert it, or open an existing `.csvx` and ask it to add sheets.
+
+## Good to know
+
+- **The header row** row 1 holds the column names, as in the CSV. A header can be empty
+- **Large sheets** the grid loads rows as you scroll, so sheets with thousands of rows stay responsive; the AI reads big sheets a window at a time
+- **Legacy `.xls`** isn't supported; save it as `.xlsx` first
+- **Unpacked packages** a `.csvx` that is a folder of files (as in the format's examples) opens read-only
