@@ -16,14 +16,14 @@ CSVX is an open spreadsheet format built for developers: **the data is plain CSV
 - **Formulas** calculate as you type, across sheets (`=Sales!C2`), and update everything that depends on them. Cells with a formula show a small corner marker; hover one to see its formula
 - **Selecting** click and drag cells; click or drag across row numbers or column letters to select whole rows and columns; ⇧-click extends and ⌘/Ctrl-click adds a separate range. Dragging past the edge scrolls
 - **Rows and columns** right-click a row number or column letter to insert above/below or delete; with several selected it acts on all of them, and formula references shift to follow. Drag a column's right edge to resize it
-- **Copy and paste** ⌘C, ⌘X, ⌘V use ordinary tab-separated text, so they work with Google Sheets and Excel. Pasting past the edge grows the sheet
+- **Copy and paste** ⌘C, ⌘X, ⌘V use ordinary tab-separated text, so they work with Google Sheets and Excel. Pasting past the edge grows the sheet. A copied formula adjusts to where you paste it, as in Sheets and Excel: `=B2*C2` copied from D2 to D5 becomes `=B5*C5`, and a `$` anchor (`$B$2`) stays put. Pasting one formula over a selection fills every cell, each adjusted on its own. **Cut** and paste moves a formula exactly as written, and text copied from another app is pasted as is
 - **Undo and redo** ⌘Z and ⇧⌘Z
 - **Sheets** the tabs along the bottom add, rename (double-click) and delete sheets
 - **Always a full grid** every sheet is shown as at least columns A–Z and 100 rows. The blank padding is only a view: it is never written to the file, and typing into it adds those cells for real
 
 ## Formatting
 
-The toolbar has bold, italic, underline, alignment, currency, text color, fill color, border color, text case and clear formatting. The three color tools show the color currently applied. Formatting applies to the whole selection, including separate ranges, and works on blank cells too.
+The toolbar has font size, bold, italic, underline, alignment, currency, text color, fill color, border color, text case and clear formatting. **Font size** has − and + buttons that step through the usual sizes, or type any size in points. A larger font makes its row taller automatically, and the row height is saved in the file, so printing and Excel export match what you see; shrinking the font shrinks the row again, unless you made that row taller yourself. The three color tools show the color currently applied. Formatting applies to the whole selection, including separate ranges, and works on blank cells too.
 
 ## Printing
 
