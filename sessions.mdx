@@ -1,0 +1,79 @@
+---
+title: Sessions
+description: "Run several AI chats at once, see what each one is doing, and place any of them in the editor grid to watch multiple streams side by side."
+---
+
+Every AI chat in Coder is a **session**: its own conversation, its own streaming state, its own message queue. Sessions keep running in the background, so you can start a task in one chat, switch to another, and come back to find the first one finished (or waiting on you).
+
+The **Sessions panel** is the control room for all of them, and any session can be opened as a tab in the editor grid, so you can put chats exactly where you want them and watch several work at the same time.
+
+Open the panel with **Cmd+Shift+8**, or from the activity bar.
+
+## The Sessions panel
+
+The panel is scoped to the current project and has two groups:
+
+- **Open** every session currently open as a chat tab, with a live status dot and a line of detail underneath:
+  - **Running** the agent is working. While a tool call is in flight, the line names it (for example *Running: search_files*).
+  - **Waiting for input** the agent asked you a question or needs a permission decision.
+  - **Idle** finished and ready for your next message.
+  - **Error** the last run failed.
+- **History** past sessions from disk that aren't currently open. Click one to open it as a chat tab. The trash icon deletes it permanently.
+
+Click an open session to make it the active chat in the side panel. The ✕ closes it (the conversation stays in History).
+
+## Open a chat in the editor
+
+Right-click a session in the Sessions panel (open or history) and choose **Open in Editor**. You can also right-click a tab in the chat panel's own tab strip and choose the same item.
+
+The chat opens as a tab in the active editor group, with a live status dot on the tab. From there it behaves like any other editor tab:
+
+- Drag it between groups, or use the tab context menu to move or split it
+- Place it in any pane of the [editor grid](/editor#split-editor-groups-grid-layout), next to code, terminals, diffs, or other chats
+- Close the tab any time; the chat itself keeps running and stays in the Sessions panel
+
+The editor tab is a second **view** of the same session, not a copy. Messages, streaming, the queue, and permission prompts are shared, so the side panel and the editor tab always agree. Opening the same session again just focuses the existing tab.
+
+Chats in editor groups are saved with your layout and come back after a restart. They load once the chat panel has restored the project's sessions; if the chat panel is hidden, the tab offers a **Show chat panel** button.
+
+### Monitoring several chats
+
+Each chat tab shows a status dot, so a chat you aren't looking at can still get your attention:
+
+| Dot | Meaning |
+|---|---|
+| Pulsing | The agent is streaming or running tools |
+| Amber | Waiting for you: a question or a permission prompt |
+| Red | The last run errored |
+| None | Idle |
+
+Open a few sessions in a grid and you can see every stream live, answer a permission prompt in the pane that needs it, and leave the others running.
+
+## Context meter and compression
+
+Each chat shows its own **context meter** in its header: how much of the model's window the last request used, against the 80% safe limit. The meter turns yellow, then red, as you approach it. The button next to it compresses that chat's history on demand by stripping tool-call payloads from older turns.
+
+A chat also **auto-compresses** when a turn ends over the safe limit. This happens per session, whether or not you're looking at it, so a long-running background chat doesn't silently run out of context.
+
+## Parallel work with worktrees
+
+Sessions pair naturally with [git worktrees](/workspaces#git-worktrees): create one worktree per feature, open one chat per worktree, and place the chats side by side. Four features can progress at once, each in its own branch and folder, while you watch all four streams.
+
+A typical setup:
+
+1. Create a worktree for each feature (**Cmd+Shift+U**, or ask the agent to do it)
+2. Start a new chat for each one and tell it which worktree to work in, by naming the path (a chat is not locked to a root; it works wherever you point it)
+3. Right-click each session, **Open in Editor**, and arrange the panes
+4. Answer prompts as the dots turn amber; review each branch's changes in the [Git panel](/git)
+
+<Info>Chats opened in the editor don't include the active editor file as context the way the side-panel chat does. If you want one to look at a file, give it the path in your message.</Info>
+
+## Keyboard
+
+| Shortcut | Action |
+|---|---|
+| Cmd+Shift+8 | Toggle the Sessions panel |
+| Cmd+Shift+A | Toggle the AI chat panel |
+| Cmd+\ | Split the editor right |
+| Cmd+Shift+\ | Split the active pane down |
+| Cmd+Shift+Arrow | Focus the adjacent pane |
