@@ -1,24 +1,25 @@
 ---
-title: Kanban Board
-description: "Per-project task board stored as plain JSON so the AI can read and write it directly."
+title: Board
+description: "Task board for the current project or all projects, stored as plain JSON so the AI can read and write it directly."
 ---
 
+- **One board, scoped by a filter** defaults to the current project; switch to All projects, a single other project, or cards with no project from the dropdown in the panel or the full-board header
 - **Board view** full-screen kanban overlay with five columns: Backlog, To Do, In Progress, Review, Done
-- **Sidebar strip** compact column preview always accessible from the activity bar
-- **Cards** rich markdown card bodies with preview/edit toggle, status dropdown, and delete confirm
+- **Table view** flat sortable table (Title, Status, Project, Updated) for people who'd rather not drag cards between columns
+- **Sidebar strip** compact column preview always accessible from the activity bar, works with no project open (shows every project)
+- **Cards** rich markdown card bodies with preview/edit toggle, status dropdown, and delete confirm; new cards are filed under the project you're viewing
 - **Drag-and-drop** move cards between columns with HTML5 drag
-- **Search** filter cards across all columns from the board header; non-matching cards dim in place
-- **AI-writable** board stored as `board.json` in the project root so the AI can read and update tasks directly; FS watcher syncs the UI instantly on external writes
+- **Search** filter cards across all columns from the board header
+- **Standalone cards** cards with no project (sketching a plan before the project exists) live in `~/.coder/global-board.json`
+- **AI-writable** each project's board is `{project-root}/board.json` so the AI can read and update tasks directly; the FS watcher syncs the UI instantly on external writes
 - **Import from Tickets** one click turns a GitHub issue or PR into a card (see [Tickets](/tickets)); re-importing updates the same card instead of duplicating it, and never overwrites the column you've moved it to
-- **Open-count badge** cards not in the last column are shown on the Kanban activity-bar icon, always live even while the panel is closed
+- **Open-count badge** cards in the current project not in the last column are shown on the Board activity-bar icon, always live even while the panel is closed
 
-Each project stores its board at `{project-root}/board.json`. The format is human-readable JSON that AI tools can write directly, useful for having the AI manage your task list. Add `board.json` to `.gitignore` if you don't want it committed.
+The "All projects" view reads every registered project's `board.json` and merges them, no separate copy is kept. Editing a card writes back to whichever file it belongs to. Add `board.json` to `.gitignore` if you don't want it committed.
 
-See also [Master Board](/masterboard) for a cross-project view.
-
-## Shotcut Key Commands
+## Shortcut Key Commands
 
 | Shortcut | Action |
 |---|---|
-| Cmd+Shift+K | Toggle Kanban |
-| Cmd+Shift+B | Open full Kanban board |
+| Cmd+Shift+K | Toggle Board panel |
+| Cmd+Shift+B | Open full board |

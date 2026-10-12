@@ -21,7 +21,7 @@ description: "Streaming chat, multiple providers, tool use, extended thinking, v
 - **Active file context** the file open in the editor is automatically included as context in every chat message
 - **Context window meter** each chat shows its own live token usage bar in its header; color shifts yellow → red as you approach the limit
 - **Context compression** compress button strips tool call payloads (file contents, code blobs) from older turns to cut token burn without losing conversation context
-- **Auto-compress** a chat automatically compresses when a turn ends with context over 80% of the model's safe window, per session, even in the background
+- **Auto-compress** a chat automatically compresses when a turn ends with context over a threshold (80% of the model's window by default; configurable, or off, in Settings → Models → AI Chat), per session, even in the background
 - **Chat history** per-project conversation sessions with a searchable history modal; sessions persist across restarts
 - **Multiple sessions** run several chats at once, monitor them from the Sessions panel, and open any of them as a tab in the editor grid to watch multiple streams side by side; see [Sessions](/sessions)
 - **Prompt system** three-tier prompt management: base system prompt, editable harness (`~/.coder/harness.md`), and custom prompts (`~/.coder/prompts/`) selectable per-session; prompts reload live without restart
@@ -38,7 +38,7 @@ Prompts are stored in `~/.coder/`:
 | `harness.md` | Guardrails and instructions always appended to the system prompt. Editable in-app via the Prompts panel. |
 | `harness-plan.md` | Harness Prompt, Plan Mode. Editable in-app via the Prompts panel. |
 | `harness-chat.md` | Harness Prompt, Chat Mode.  Editable in-app via the Prompts panel. |
-| `prompts/*.md` | Custom prompts selectable per-session from the chat model row. |
+| `prompts/*.md` | Custom prompts. The picker in the chat model row is hidden by default (skills cover most of this); turn it on in Settings → Models → AI Chat. While hidden, no custom prompt is applied. |
 | `skills/<name>/SKILL.md` | Progressive-disclosure skills, see [Skills](/skills). Managed in the same Prompts panel. |
 
 ## Shotcut Key Commands

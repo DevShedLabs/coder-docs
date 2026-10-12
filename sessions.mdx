@@ -22,19 +22,19 @@ The panel is scoped to the current project and has two groups:
 
 Click an open session to make it the active chat in the side panel. The ✕ closes it (the conversation stays in History).
 
-## Open a chat in the editor
+## Move a chat to the editor
 
-Right-click a session in the Sessions panel (open or history) and choose **Open in Editor**. You can also right-click a tab in the chat panel's own tab strip and choose the same item.
+Right-click a session in the Sessions panel (open or history) and choose **Move to Editor**. You can also right-click a tab in the chat panel's own tab strip and choose the same item.
 
-The chat opens as a tab in the active editor group, with a live status dot on the tab. From there it behaves like any other editor tab:
+The chat **moves** out of the side panel and opens as a tab in the active editor group, with a live status dot on the tab. From there it behaves like any other editor tab:
 
 - Drag it between groups, or use the tab context menu to move or split it
 - Place it in any pane of the [editor grid](/editor#split-editor-groups-grid-layout), next to code, terminals, diffs, or other chats
-- Close the tab any time; the chat itself keeps running and stays in the Sessions panel
+- Close the tab any time to **return it to the side panel**. The chat keeps running either way, and you can also choose **Return to Sidebar** on it in the Sessions panel
 
-The editor tab is a second **view** of the same session, not a copy. Messages, streaming, the queue, and permission prompts are shared, so the side panel and the editor tab always agree. Opening the same session again just focuses the existing tab.
+While a chat is in the editor, it no longer appears in the side panel's tab strip, and the side panel always shows one of the chats that are still there (a fresh one if you moved them all out). Clicking that session in the Sessions panel jumps to its editor tab.
 
-Chats in editor groups are saved with your layout and come back after a restart. They load once the chat panel has restored the project's sessions; if the chat panel is hidden, the tab offers a **Show chat panel** button.
+Chats in editor groups are saved with your layout and come back after a restart, even if the chat panel is hidden. Sessions load when the project opens, not when the panel does.
 
 ### Monitoring several chats
 
@@ -51,9 +51,9 @@ Open a few sessions in a grid and you can see every stream live, answer a permis
 
 ## Context meter and compression
 
-Each chat shows its own **context meter** in its header: how much of the model's window the last request used, against the 80% safe limit. The meter turns yellow, then red, as you approach it. The button next to it compresses that chat's history on demand by stripping tool-call payloads from older turns.
+Each chat shows its own **context meter** in its header: how much of the model's window the last request used, against the safe limit (80% by default). The meter turns yellow, then red, as you approach it. The button next to it compresses that chat's history on demand by stripping tool-call payloads from older turns.
 
-A chat also **auto-compresses** when a turn ends over the safe limit. This happens per session, whether or not you're looking at it, so a long-running background chat doesn't silently run out of context.
+A chat also **auto-compresses** when a turn ends over the safe limit. The threshold, and whether auto-compact runs at all, is set in **Settings → Models → AI Chat**. This happens per session, whether or not you're looking at it, so a long-running background chat doesn't silently run out of context.
 
 ## Parallel work with worktrees
 
@@ -63,7 +63,7 @@ A typical setup:
 
 1. Create a worktree for each feature (**Cmd+Shift+U**, or ask the agent to do it)
 2. Start a new chat for each one and tell it which worktree to work in, by naming the path (a chat is not locked to a root; it works wherever you point it)
-3. Right-click each session, **Open in Editor**, and arrange the panes
+3. Right-click each session, **Move to Editor**, and arrange the panes
 4. Answer prompts as the dots turn amber; review each branch's changes in the [Git panel](/git)
 
 <Info>Chats opened in the editor don't include the active editor file as context the way the side-panel chat does. If you want one to look at a file, give it the path in your message.</Info>
