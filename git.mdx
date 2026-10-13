@@ -1,12 +1,12 @@
 ---
 title: Git
-description: "Status, stage/unstage, commit, push/pull/fetch, branch management, and discard changes."
+description: "Status, stage/unstage, commit, push/pull/fetch, branch management, tags, worktrees, and discard changes."
 ---
 
 ![Git Sync](media/git-sync.jpg)
 
 <Info>You will see 2 important notices in the above image.</Info>
-1. The create branch notice. 
+1. The create branch notice. It appears whenever you're on the repo's default branch. The default is read from `origin/HEAD`; if that isn't set (common for repos made with `git init` + `git remote add`), Coder falls back to `main`, then `master`.
 2. Sync notice, letting you know there are upstream changes.
 
 ## Workflows
@@ -15,6 +15,7 @@ description: "Status, stage/unstage, commit, push/pull/fetch, branch management,
 - `Cmd+U` Push ( now also auto-sets upstream for a brand-new branch )
 - `Cmd+;` Create PR
 - Delete branches (if you need)
+- Manage tags from the **Tags** section of the Git panel (see [Tags](#tags))
 
 <Warning>Creating cross org PR's requires a classic token with repo scope in GitHub</Warning>
 
@@ -41,6 +42,20 @@ __Auto Upstream detection__
 
 ![Create PR](media/create-pr.jpg)
 
+
+## Tags
+
+The **Tags** section in the Git panel shows the tag count and your latest tag. Click the tag icon to open the tag manager.
+
+- **Create** enter a name and optionally an "At" target (a commit, branch, or tag; defaults to `HEAD`). Add a message to make it an **annotated** tag; leave it empty for a lightweight tag.
+- **Browse and filter** every tag with its commit, date, tagger, and subject, searchable by name or subject
+- **Check remote** contacts origin to mark each tag as `pushed` or `local only`. This is a network call, so it only runs when you ask (or right after an action that already talks to origin).
+- **Push** a single tag (↑), or **Push all** (shows how many are unpushed once the remote has been checked)
+- **Delete** a local tag (trash icon) or a tag on origin (⇡✕), each with a two-click confirm
+- **Fetch tags** the refresh icon in the header pulls tags from origin
+- **Copy name** copies the tag name to the clipboard
+
+<Warning>Deleting a tag from origin removes it for everyone. Tags already pulled by others stay on their machines.</Warning>
 
 ## Shotcut Key Commands
 
