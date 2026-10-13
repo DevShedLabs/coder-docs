@@ -35,6 +35,16 @@ The new worktree attaches to the workspace immediately and appears as its own se
 - Click the ✕ next to one and click again to confirm — this detaches it from the workspace and runs `git worktree remove`
 - The refresh icon runs `git worktree prune`, cleaning up worktree entries whose folders were deleted outside the app
 
+### Finishing a worktree
+
+When the branch is done, click the ✓ next to the worktree to open the **Finish worktree** dialog. It lands the branch on whatever branch the main checkout has open, then cleans up:
+
+- Shows the commits that will land and whether the base branch has moved on. If it has, **Rebase onto** / **Merge in** update the worktree branch first.
+- Choose how to land it: **Merge commit**, **Rebase and fast-forward** (linear history), or **Squash** into one commit.
+- Optionally remove the worktree and delete its branch afterwards (local branch only).
+
+Both checkouts must have no uncommitted changes. You can also ask the AI agent to do this — it has a `finish_worktree` tool with status, update and finish actions (it won't remove the worktree it's running in). If a merge or rebase hits conflicts it is aborted and nothing changes — the dialog lists the conflicting files so you can resolve them in the worktree (for example by rebasing there) and try again.
+
 ### From AI chat
 
 You can also ask the AI agent to create a worktree for you — it has a `create_worktree` tool and will pick a sensible branch name and location, or use ones you specify. This is a good way to run more than one chat session in parallel, each working its own branch without stepping on the other's files. See [Sessions](/sessions) for running and watching several chats side by side in the editor grid.
