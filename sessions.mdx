@@ -1,6 +1,6 @@
 ---
 title: Sessions
-description: "Run several AI chats at once, see what each one is doing, and place any of them in the editor grid to watch multiple streams side by side."
+description: "Run several AI chats at once, see what each one is doing, resume Claude Code sessions, and place chats in the editor grid to watch multiple streams side by side."
 ---
 
 Every AI chat in Coder is a **session**: its own conversation, its own streaming state, its own message queue. Sessions keep running in the background, so you can start a task in one chat, switch to another, and come back to find the first one finished (or waiting on you).
@@ -21,6 +21,19 @@ The panel is scoped to the current project and has two groups:
 - **History** past sessions from disk that aren't currently open. Click one to open it as a chat tab. The trash icon deletes it permanently.
 
 Click an open session to make it the active chat in the side panel. The ✕ closes it (the conversation stays in History).
+
+## Claude Code sessions
+
+The toggle at the top of the panel switches between **Coder** (Coder's own AI chats, described above) and **Claude Code**. The Claude Code view lists the sessions the `claude` CLI has recorded for the current project, newest first, each with its title and when it was last active. Your choice is remembered.
+
+Click a session and Coder opens a new terminal in the project and runs `claude --resume <session-id>`, so you pick up exactly where that conversation left off.
+
+- Sessions are read from `~/.claude/projects/` and are never modified. The list refreshes each time you switch to the Claude Code view.
+- Titles are the ones Claude generated for the session. If there isn't one yet, the first thing you typed is used.
+- The list covers the project's main folder. Sessions started from other roots of a multi-root workspace aren't shown.
+- Clicking a session that is already running in another terminal starts a second copy of it. Switch to the existing terminal instead.
+
+<Info>This requires the `claude` CLI to be installed and on your PATH in Coder's terminal.</Info>
 
 ## Move a chat to the editor
 
