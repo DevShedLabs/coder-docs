@@ -74,7 +74,7 @@ What follows is the exact variable/JSON shape a custom theme needs to match, the
 
 ### UI theme variables
 
-A UI theme is exactly these 15 CSS custom properties, declared inside a plain `:root { ... }` block, no `data-theme="..."` attribute needed, since the folder name is already the id. All 15 are required, there's no partial-override/fallback-to-default behavior today. Values shown are Coder Dark (Mocha):
+A UI theme is exactly these 15 CSS custom properties, declared inside a plain `:root { ... }` block, no `data-theme="..."` attribute needed, since the folder name is already the id. All 15 are required, there's no partial-override/fallback-to-default behavior today. One optional extra, `--terminal-bg`, sets the background behind the integrated terminal; if you leave it out it defaults to `--bg-surface`, so set it to match your `terminal_theme.background`. Values shown are Coder Dark (Mocha):
 
 ```css
 /* ~/.coder/themes/your-theme-id/ui.css */
@@ -161,3 +161,30 @@ An editor theme is a Monaco `IStandaloneThemeData` object, `base` (`'vs-dark'` o
 ```
 
 The `*.php` rules exist because Monaco's bundled PHP grammar emits its own token names (`variable.php`, `keyword.php`, etc.) instead of matching the generic ones above it, without them, PHP code falls back to plain foreground for variables, property/method names, and punctuation. Every other token type (`comment`, `keyword`, `string`, …) works across all languages via Monaco's generic Monarch token names.
+
+### Terminal colors (`terminal_theme`)
+
+The integrated terminal follows the editor theme, so its colors live in the same `editor.json`, under a top-level `terminal_theme` object next to `rules` and `colors`:
+
+```json
+"terminal_theme": {
+  "background": "#1e1e2e", "foreground": "#cdd6f4", "cursor": "#f5c2e7",
+  "black": "#45475a",  "red": "#c44554",  "green": "#a6e3a1",  "yellow": "#f9e2af",
+  "blue": "#89b4fa",   "magenta": "#cba6f7", "cyan": "#94e2d5", "white": "#f0f0f5",
+  "brightBlack": "#585b70", "brightRed": "#c26f86", "brightGreen": "#a6e3a1", "brightYellow": "#f9e2af",
+  "brightBlue": "#89b4fa",  "brightMagenta": "#f5c2e7", "brightCyan": "#94e2d5", "brightWhite": "#ffffff"
+}
+```
+
+Command-line tools such as composer, phpunit and npm print errors as white text on a red background, so `white` on `red` and `brightWhite` on `brightRed` must be readable. A pastel red with grey text is the classic washed-out error banner. The theme health check warns when either pair drops below 3:1 contrast. If you leave `terminal_theme` out, the terminal uses colors derived from your editor theme, and the health check tells you so.
+
+### Theme health check
+
+Settings → General checks every custom editor theme and lists what's wrong under the **Editor theme** dropdown. Each theme shows **Complete**, or a count of errors and warnings you can expand.
+
+- **Errors** are things that will look broken: a malformed color, no `rules` or `colors`, or a missing core token color (comments, keywords, strings, numbers, types, functions, variables, operators, punctuation).
+- **Warnings** are polish: an uncolored scope, a missing editor chrome color, `semanticHighlighting` not turned on, or a color that's nearly invisible against your `editor.background`.
+
+The reason it matters: with `inherit: true`, any token your theme doesn't color falls back to Monaco's stock VS Code color, not to your plain text color. Skip `tag`, `attribute.name` or `string.key.json` and HTML tags, attributes and JSON keys show up in VS Code's blues and oranges, whatever your palette. The check lists exactly which token types are missing, grouped by language (HTML/XML, JSON/YAML, CSS/SCSS, and so on).
+
+The easiest way to get a complete theme is to copy a built-in one from `src/lib/monaco/themes/` and change the colors. Every built-in theme is held to the same check by an automated test.
