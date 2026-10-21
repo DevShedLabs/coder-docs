@@ -1,0 +1,85 @@
+---
+title: Code Formatting
+description: "Coder Formatter: profile-based, per-language formatting with JetBrains-style options, a live preview, and its own settings file."
+---
+
+Coder Formatter is a formatting engine with detailed per-language rules and named profiles, in the style of JetBrains' code style settings. It is **off by default**. When it is off, formatting works exactly as before (language server, then Monaco's own formatters).
+
+Supported languages: CSS, Go, HTML, JavaScript, JSON, Markdown, PHP, Python, Rust, TOML, TSX, TypeScript, and YAML. A file in any other language is formatted the old way, even with Coder Formatter on.
+
+## Turning it on
+
+**Settings → Editor → Use Coder Formatter** is the first option. It applies immediately; it is not part of the Settings **Save** step. **Configure formatting…** opens the full-screen formatting window.
+
+Once on:
+
+- **Format Document** (`Cmd+L`) uses the engine for supported files.
+- **Format on save** (a separate switch in the same tab) uses the engine too.
+- With text selected, Format Document formats just the selection.
+
+If the engine is on but can't safely format a file, the file is left exactly as written and a notice explains why (see [When formatting is refused](#when-formatting-is-refused)).
+
+## The formatting window
+
+Three columns:
+
+- **Languages** every supported language. A dot marks languages you've customised.
+- **Options** a profile picker, a search box, and every option for the selected language grouped by category (indentation, spaces, wrapping, alignment, blank lines, braces, and so on). Changed options are marked with a coloured bar and a **Reset** button. **Reset language** goes back to the profile's defaults.
+- **Preview** sample code in the selected language, formatted live as you change options.
+  - **Formatted** the result.
+  - **Changes** a diff from the sample to the result.
+  - **Edit sample** paste your own code to try the rules on. **Restore default sample** brings the built-in one back.
+
+Changes are saved automatically a moment after you make them. `Esc` closes the window.
+
+### Profiles
+
+A profile is a named starting point, such as `default`, `psr-12`, or `wordpress` for PHP. Pick one, then override individual options on top. Only your overrides are saved, so a profile improved in a future Coder release carries through to anything you haven't overridden.
+
+## HTML, PHP and other mixed files
+
+Code embedded in a file is formatted with **that language's own settings**:
+
+- `<style>` blocks use the **CSS** settings.
+- `<script>` blocks use the **JavaScript** settings; JSON blocks use the **JSON** settings.
+- Indentation and line width always come from the **host** language (HTML or PHP), so a CSS profile that uses tabs has no effect inside a `<style>` block unless the HTML settings also use tabs.
+
+Configure CSS once and it applies to `.css` files and to `<style>` blocks alike. The HTML and PHP pages in the window remind you of this.
+
+## Where settings are stored
+
+`~/.coder/formatting.json` (`~/.coder-dev/` when running a dev build; a named Coder profile has its own copy). It holds only formatting settings, nothing else from Coder, so other tools can read it.
+
+```json
+{
+  "version": 1,
+  "enabled": true,
+  "languages": {
+    "php": { "profile": "wordpress", "overrides": { "alignment.assignments": "align" } },
+    "css": { "overrides": { "indentation.useTabs": true } }
+  },
+  "profiles": {},
+  "embedded": {}
+}
+```
+
+- Edits made to the file outside Coder are picked up while Coder is running.
+- A file that can't be parsed is copied to `formatting.json.bak` and Coder starts from defaults.
+- Option ids you no longer have in a newer engine are kept and reported as warnings instead of being deleted.
+- `embedded.<host>.<language>` (for example `embedded.php.css`) replaces a language's own settings for that host only. There's no control for this in the window yet; edit the file.
+
+## When formatting is refused
+
+The engine re-checks its own output and refuses to apply a result that would change your code's meaning or lose text. You'll see **"Formatting would change tokens (internal safety check); input left unchanged"**. Your file is not touched. This indicates a formatter bug, not a problem with your code; please report it with the file that triggered it.
+
+Other notices:
+
+- **Syntax warnings** the file doesn't parse. Only the parts that can be formatted were, or the whole file is left as written, depending on the language.
+- **Unknown option** a saved setting doesn't exist in this version of the engine. It's kept in the file and ignored.
+
+## Current limitations
+
+- Right-click **Format Document** and `Shift+Alt+F` still use Monaco's own formatters; only `Cmd+L` and format on save use Coder Formatter.
+- Profiles can't be saved or duplicated under your own name yet.
+- `.editorconfig` files aren't read yet.
+- Settings are global, not per project.

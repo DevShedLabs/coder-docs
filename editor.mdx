@@ -60,7 +60,8 @@ Typing `/**` above a function and pressing Enter auto-continues the block with `
 
 - **Bracket pair colorization** and **inline AI completions** (ghost-text, ["AI"](/ai)) are on.
 - **Format on save** optional, off by default, see Settings below. If it fails, the save still goes through.
-- **Format Document** (`Cmd+L`) reformats the current file; for HTML/PHP, embedded `<style>`/`<script>` blocks are extracted and formatted with their own language's formatter, then spliced back in, since the outer language's formatter alone would leave them untouched.
+- **Coder Formatter** an optional profile-based formatting engine with per-language rules, switched on in Settings → Editor; see [Code Formatting](/formatting).
+- **Format Document** (`Cmd+L`) reformats the current file; for HTML/PHP, embedded `<style>`/`<script>` blocks are extracted and formatted with their own language's formatter, then spliced back in, since the outer language's formatter alone would leave them untouched. With [Coder Formatter](/formatting) on, supported files are formatted by it instead, and embedded code uses the CSS/JavaScript/JSON settings.
 - **Go to definition** (`Cmd/Ctrl+click` or F12) always jumps directly to a real editor tab, never Monaco's inline "peek" popup, even across files.
 - **View state** scroll position and cursor location are remembered per file and restored when you come back to a tab.
 - **External changes** if a file changes on disk while it's open (another process, a git operation), the change is merged into the live buffer in place, undo history and cursor position survive, instead of a full reload.
@@ -71,7 +72,7 @@ Typing `/**` above a function and pressing Enter auto-continues the block with `
 
 **Settings → General**: editor color theme (see [Themes](/themes)), editor font size (8–32px).
 
-**Settings → Editor**: indent size (2/4 spaces), indent style (spaces/tabs), format on save.
+**Settings → Editor**: indent size (2/4 spaces), indent style (spaces/tabs), format on save, and the [Coder Formatter](/formatting) switch with its configuration window.
 
 ## Shortcut Key Commands
 

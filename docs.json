@@ -32,6 +32,7 @@
 				"pages": [
 					"getting-started",
 					"editor",
+					"formatting",
 					"ai",
 					"sessions",
 					"jarvis-mode",
