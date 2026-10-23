@@ -1,0 +1,44 @@
+---
+title: Bookmarks
+description: "Mark spots in your code, add a short note, and get back to them with one click, grouped by workspace root."
+---
+
+In a large codebase you end up at the same obscure places again and again: the one stylesheet rule you found through the inspector, the config that controls a behavior, the function everything funnels through. **Bookmarks** save those spots, optionally with a note, so getting back is a click instead of a search.
+
+Bookmarks belong to the current project (or multi-root [workspace](/workspaces)). They are stored on your machine in `~/.coder`, never in the repo, so they don't show up in git and aren't shared with teammates.
+
+## Add a bookmark
+
+- Press **Cmd+F2** with the cursor on a line. Pressing it again on a bookmarked line removes the bookmark.
+- Or right-click a line and choose **Toggle Bookmark**.
+- To add a note at the same time, right-click and choose **Bookmark with Note…**. The Bookmarks panel opens with the note field ready to type in.
+
+A bookmarked line gets a blue ribbon in the gutter and a faint tint. Hover the ribbon to see the note. Click the ribbon to remove the bookmark.
+
+<Info>Clicking the gutter on a line without a bookmark sets a breakpoint, as usual. Breakpoints and bookmarks use separate gutter lanes, so a line can have both.</Info>
+
+## The Bookmarks panel
+
+Open it with **Cmd+Shift+9**, or from the activity bar.
+
+- Each row shows the note as its title (or the text of the line if there's no note), with `file:line` underneath. **Click a row** to open the file at that line.
+- Use the filter box to search notes, line text, and paths.
+- **Edit a note**: double-click a row, press **F2** on it, or click the pencil. Enter saves, Esc cancels. Clear the text to remove the note.
+- **Remove a bookmark** with the trash icon in the row's top-right corner. Both buttons appear when you hover the row.
+
+In a multi-root workspace, bookmarks are grouped under a collapsible header for each root. With a single root the headers are hidden.
+
+## Bookmarks follow your edits
+
+When you insert or delete lines above a bookmark, it moves with its code and keeps pointing at the same line. The new position is saved when you stop typing, and again when the file closes, so it stays correct across restarts.
+
+Edits made outside Coder (a `git pull`, another editor) can't be tracked. After a big external change a bookmark may point at the wrong line.
+
+## Shortcuts
+
+| Shortcut | Action |
+|---|---|
+| Cmd+F2 | Toggle bookmark on the current line |
+| Cmd+Shift+9 | Toggle the Bookmarks panel |
+
+Both can be rebound in Settings.
