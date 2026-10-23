@@ -61,6 +61,7 @@
 					"search",
 					"bookmarks",
 					"git",
+					"git-blame",
 					"workspaces",
 					"tickets",
 					"pr-management"

@@ -1,0 +1,68 @@
+---
+title: Git Blame
+description: "See who last changed a line and when, right in the editor: inline text on the cursor line, an optional gutter column, and a hover card with the full commit."
+---
+
+When you land in unfamiliar code, the first question is usually "who changed this, and why?" **Git Blame** answers it without leaving the editor. It reads your repository's history, so it works with whatever git already knows, and nothing is stored or sent anywhere.
+
+There are two ways to see it, and you can use either, both, or neither.
+
+## Inline blame
+
+Put the cursor on a line and a faint note appears after the code:
+
+```
+const total = items.reduce(add, 0)        Jeff, 10/22/2026 8:30pm • Fix cart rounding
+```
+
+It shows the author, the date, and the first line of the commit message. It only appears on the line your cursor is on, so the rest of the file stays clean. It is on by default.
+
+A line you have edited since the last commit reads **Uncommitted changes**. The note updates as you type, and lines below an edit keep their own blame as they shift.
+
+## The gutter column
+
+For the whole file at once, turn on **Show blame in the gutter**. Every line number gets the date its line last changed next to it:
+
+```
+10/22/26    42
+ 3d ago     43
+```
+
+Edited lines are left blank, and files that are not in a git repository show plain line numbers. This is off by default.
+
+## The hover card
+
+Hover the inline note, or a line number when the gutter is on, to get the details:
+
+- The author, the full date and time, and the short commit hash
+- The complete commit message, not just the first line
+- **Open commit** opens that file's diff as of the commit, the same view you get from the history list in the [Git](/git) panel
+- **Copy hash** puts the full commit hash on your clipboard
+
+On an edited line the card just says **Uncommitted changes**.
+
+<Info>**Open commit** looks the file up by its current path, so for a commit from before the file was renamed it may open an empty diff.</Info>
+
+## Settings
+
+Everything is under **Settings → Editor → Git blame**, and each option can be switched off if you find it noisy.
+
+| Setting | Default | What it does |
+|---|---|---|
+| Show inline blame on the current line | On | The faint note after the cursor line |
+| Show commit details on hover | On | The hover card, for both the inline note and the gutter |
+| Show blame in the gutter | Off | The date column beside the line numbers |
+| Date format | Absolute | `10/22/2026 8:30pm` or `3 days ago` (the gutter uses a short form of the same choice) |
+
+## When it updates
+
+Blame is read once when you open a file, then refreshed when you save, and whenever git changes underneath you, such as a commit, checkout, or pull, including ones made from the terminal. Between those moments it follows your typing.
+
+Split panes are fine: the same file open in two panes stays in step, and each pane shows its own file.
+
+## Limits
+
+- It only works for files inside a git repository. Untracked files, files outside a repo, and remote (SFTP) files show nothing.
+- Binary files are skipped.
+- With the gutter on, files longer than 9,999 lines lose the leftmost digit of the line number.
+- Blame is read from the saved file. Changes made by another program while the file is open in Coder are treated like your own edits, so those lines read **Uncommitted changes** until the next save or git change refreshes them.
