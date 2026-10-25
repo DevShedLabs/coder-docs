@@ -61,6 +61,7 @@
 					"search",
 					"bookmarks",
 					"git",
+					"git-history",
 					"git-blame",
 					"workspaces",
 					"tickets",

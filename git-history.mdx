@@ -1,0 +1,72 @@
+---
+title: Git History
+description: "Browse your repository's full commit graph in an editor tab: branches, merges and tags, a changed-files list for every commit, filters, and right-click actions."
+---
+
+The **Git History** panel in the Git sidebar is a quick list of recent commits. For the whole picture, open it as a full editor tab with the branch icon in the panel header. You get a real commit graph, so you can see where branches split and merge, with everything git knows about the repo.
+
+The tab opens in whichever editor group is active and can be dragged to any other group. Opening it again focuses the existing tab. It is not restored when you relaunch Coder; click the branch icon again.
+
+## The graph
+
+Each row is one commit: the graph lane, any branch or tag badges, the message, author, date and short hash.
+
+- **Lanes** show parallel work. Merge commits are drawn as hollow dots.
+- **Badges** mark the current branch (`HEAD`), local and remote branches, and tags.
+- **Scrolling** stays fast on large repos. Commits load in pages of 500 as you approach the end, and only the rows on screen are drawn.
+- **Reload** (the refresh icon in the toolbar) re-reads the repository. It also reloads by itself after any action you run from this tab.
+
+Click a row, or use the ↑ and ↓ keys, to select a commit.
+
+## Commit details
+
+Selecting a commit opens a pane below the list with:
+
+- The subject and full commit message
+- The full author, date and time, parent hashes and badges. Click the hash to copy it.
+- Every file the commit changed, with a status letter (`A` added, `M` modified, `D` deleted, `R` renamed) and the lines added and removed. Binary files show `bin`.
+
+Click a file to open its diff as of that commit. For a merge commit, the file list is the change relative to its first parent.
+
+Drag the bar above the pane to resize it. Close it with the ✕ button or **Esc**.
+
+## Filters
+
+The bar above the list narrows the history. Text filters apply after a short pause in typing.
+
+- **Branch** limits the view to one local or remote branch. Everything else shows all branches.
+- **Message** matches commit messages (case-insensitive).
+- **Author** matches author name or email (case-insensitive).
+- **Path** shows only commits that touched a file or folder.
+
+**Clear** resets all four.
+
+<Note>With a message, author or path filter, the list is shown flat, without the graph. Those filters skip commits, so the lines connecting them would be misleading. A branch filter alone keeps the graph.</Note>
+
+## Right-click actions
+
+Right-click any commit for:
+
+| Action | What it does |
+| --- | --- |
+| **Checkout commit** | Checks out the commit in a detached state |
+| **Checkout \<branch\>** | Appears for each other branch on that commit |
+| **Create branch here…** | Creates a branch at that commit and checks it out |
+| **Create tag here…** | Creates a tag at that commit. Add a message for an annotated tag. |
+| **Copy hash** | Copies the full commit hash |
+| **Cherry-pick onto \<branch\>** | Applies the commit as a new commit on your current branch |
+| **Revert commit** | Adds a commit on your current branch that undoes it |
+| **Merge \<branch\> into \<current\>** | Appears for each other branch on that commit |
+| **Push tag \<name\>** | Pushes that tag to origin |
+| **Delete tag \<name\>** | Deletes the local tag |
+
+Cherry-pick, revert, merge and delete tag ask for confirmation first. A toast confirms success; a failure shows git's own message.
+
+<Warning>If a cherry-pick, revert or merge hits a conflict, Coder aborts it and your branch is left exactly as it was. Resolving conflicts is not done from this tab, so for a conflicting change, run it from the terminal. A working tree with uncommitted changes can also make git refuse the operation.</Warning>
+
+<Note>Delete tag only removes the local tag. To remove a tag from origin, use the [tag manager](/git#tags).</Note>
+
+## Related
+
+- [Git](/git) the status panel, branches, pull requests and tags
+- [Git Blame](/git-blame) the same history, line by line, inside the editor
