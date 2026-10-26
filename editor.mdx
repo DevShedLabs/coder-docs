@@ -62,6 +62,8 @@ Typing `/**` above a function and pressing Enter auto-continues the block with `
 - **Format on save** optional, off by default, see Settings below. If it fails, the save still goes through.
 - **Coder Formatter** an optional profile-based formatting engine with per-language rules, switched on in Settings → Editor; see [Code Formatting](/formatting).
 - **Format Document** (`Cmd+L`) reformats the current file; for HTML/PHP, embedded `<style>`/`<script>` blocks are extracted and formatted with their own language's formatter, then spliced back in, since the outer language's formatter alone would leave them untouched. With [Coder Formatter](/formatting) on, supported files are formatted by it instead, and embedded code uses the CSS/JavaScript/JSON settings.
+- **Column (box) selection** hold `Shift+Option` and drag to select a rectangular block, then type, paste, or delete to edit every line at once, handy for list items, aligned values, or adding a prefix/suffix to many lines. Middle-mouse drag does the same. Keyboard versions are rebindable in Settings → Keybindings (see below); the mouse gesture itself is Monaco's and isn't.
+- **Multi-cursor** `Cmd+Alt+Up/Down` adds a cursor on the line above/below, `Cmd+Alt+G` adds the next occurrence of the selected word to the selection, and `Cmd+Alt+L` selects every occurrence. `Cmd+Shift+Alt+Arrows` grows a column selection from the keyboard. `Cmd+D` stays Duplicate Line, and `Cmd+Shift+L` stays Live Reload, which is why these use `Alt`.
 - **Go to definition** (`Cmd/Ctrl+click` or F12) always jumps directly to a real editor tab, never Monaco's inline "peek" popup, even across files.
 - **View state** scroll position and cursor location are remembered per file and restored when you come back to a tab.
 - **External changes** if a file changes on disk while it's open (another process, a git operation), the change is merged into the live buffer in place, undo history and cursor position survive, instead of a full reload.
@@ -83,6 +85,11 @@ Typing `/**` above a function and pressing Enter auto-continues the block with `
 | Cmd+L | Format document |
 | Cmd+D | Duplicate line |
 | Cmd+F | Find in file |
+| Shift+Option+drag | Column (box) selection, edit multiple lines at once |
+| Cmd+Alt+Up / Down | Add cursor above / below |
+| Cmd+Alt+G | Add next occurrence to selection |
+| Cmd+Alt+L | Select all occurrences |
+| Cmd+Shift+Alt+Arrow | Column select with the keyboard |
 | Cmd+\ | Split editor right (new column) |
 | Cmd+Shift+\ | Split pane down (new stacked row) |
 | Cmd+Shift+] / [ | Next / previous tab (within the active pane) |
