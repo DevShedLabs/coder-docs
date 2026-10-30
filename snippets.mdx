@@ -1,0 +1,84 @@
+---
+title: Snippets
+description: "Save reusable code templates per language, trigger them by typing a short prefix, and tab through placeholders you fill in."
+---
+
+**Snippets** are templates you write once and expand by typing a short prefix. They appear in the editor's normal suggestion popup, mixed in with the language server's completions, so there is nothing new to learn at the keyboard: type, pick, press Tab.
+
+Snippets are organized by language, so a `log` snippet can print differently in PHP, JavaScript and Go. A **Global** group holds snippets offered in every file, such as a `todo` comment stamp or a license header.
+
+They are stored on your machine in `~/.coder/snippets.json`, not in any repo, and they apply to every project.
+
+## Create a snippet
+
+Open **Settings → Snippets**.
+
+1. Pick a language in the list on the left. Use the search box at the top to filter it. **Global** is always pinned first.
+2. Click **+ New snippet**.
+3. Fill in the three fields:
+   - **Prefix**, the keystrokes that make the snippet appear in the popup.
+   - **Description**, shown beside the prefix in the popup.
+   - **Body**, the text that gets inserted. It's edited in a small editor with that language's syntax highlighting.
+
+The Snippets tab saves as you type. The Save and Cancel buttons at the bottom of Settings don't apply to it.
+
+<Info>If two snippets in the same language share a prefix, a warning appears under the field. Both still work; the popup just lists both.</Info>
+
+## Use a snippet
+
+Start typing the prefix in any file of that language. The snippet shows up in the suggestion popup, listed above the language server's and word-based suggestions. Press **Enter** or **Tab** to insert it.
+
+- **Ctrl+Space** lists every snippet for the file's language, plus the Global ones, without typing anything first.
+- Prefixes can start with punctuation, like `!doc` or `/**`. Typing that character opens the popup on its own.
+- The popup appears automatically while you type in code, but not inside strings or comments, which is how the editor behaves for all suggestions. Press **Ctrl+Space** there.
+
+After insertion, press **Tab** to jump to the next placeholder and **Shift+Tab** to go back.
+
+## Placeholders
+
+The body supports the standard snippet syntax, the same one VS Code uses.
+
+| Syntax | What it does |
+|---|---|
+| `$1`, `$2`, … | Tab stops. The cursor visits them in number order. |
+| `${1:default}` | A tab stop with default text, pre-selected so typing replaces it. |
+| `$0` | Where the cursor ends up after the last Tab. |
+| `$TM_FILENAME` | Name of the current file. |
+| `$CURRENT_YEAR` | The current year. |
+| `$CLIPBOARD` | Whatever is on the clipboard. |
+
+### Named placeholders
+
+Coder adds a shorthand that is easier to read than numbers. Write a name in capitals between two dollar signs:
+
+```php
+foreach ($LIST$ as $ITEM$) {
+    echo $ITEM$;
+}
+```
+
+Tab lands on each name in order, with the name selected as example text. Type to replace it. Using the same name twice **mirrors** it, so typing the item name once updates every `$ITEM$`.
+
+Names must start with a capital letter and use only capitals, digits and underscores. That keeps ordinary code such as `$a$` or `$total` untouched. Named placeholders can be mixed with numbered ones in the same body.
+
+## Import and export
+
+Snippets use the same JSON format as VS Code, so existing snippet packs work.
+
+- **Import VS Code…** reads a VS Code snippet file (`.json` or `.code-snippets`) and **adds** its snippets to the language you have selected. Nothing is overwritten. An entry with several prefixes becomes one snippet per prefix.
+- **Export…** saves the selected language's snippets as a VS Code snippet file, handy for sharing or backups.
+
+Import adds to the selected language, so pick the right one first.
+
+## Languages
+
+The list shows common languages rather than every one the editor knows. Any language that already has snippets in your file is always shown, even if it isn't on the common list.
+
+## The file
+
+`~/.coder/snippets.json` is plain JSON, grouped by language id (`php`, `javascript`, and `all` for Global). You can edit it by hand: Coder watches it and picks up changes immediately. If it becomes unreadable, Coder keeps a copy as `snippets.json.bak` and starts with an empty set rather than failing to launch.
+
+## Limits
+
+- Snippets are global. There are no per-project snippets.
+- Each snippet has a single prefix.
