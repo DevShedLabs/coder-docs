@@ -25,5 +25,11 @@ See [Language Intelligence → DAP, debuggers](/lsp#dap-debuggers) for the gener
 
 Most compiled languages (Rust, Zig, Swift, C/C++) share the same `lldb-dap` setup (ships with the Xcode Command Line Tools via `xcode-select --install`, or `brew install llvm`) and require a binary you've already built (`cargo build` / `zig build` / `swift build` / your C compiler), the debugger doesn't invoke any of those build tools for you.
 
+## AI agent traces
+
+An AI agent running in your terminal can trace PHP code for you with a single command, no launch form and no adapter needed: it sets a breakpoint, runs your tests or script, and reads the values you care about each time the line is hit. See [Command Line & AI Agents → Debug traces](/cli#debug-traces).
+
+You see exactly what the agent saw. Each trace is added to the **Debug console** (which opens next to your terminal) and recorded to **Session history** with an **agent** badge, so you can copy it as text or export it to Markdown or HTML like any other session. Secret-looking values are masked before they are shown or saved.
+
 ## Debugger Reports
 ![Debugger report](media/debugger-report.jpg)

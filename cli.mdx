@@ -1,0 +1,166 @@
+---
+title: Command Line & AI Agents
+description: "The coder command opens files from your terminal, and lets Claude Code, Codex, or any CLI agent drive Coder: jump to a line, show a diff, preview a page, and trace PHP code, with no setup."
+---
+
+The `coder` command does two jobs:
+
+- **Open things from a terminal.** `coder file.ts`, `coder my-project/`.
+- **Let an AI agent drive Coder.** An agent running in your terminal can jump to a line, show you a diff, preview the page it just built, or trace a method while your tests run, and you see all of it in Coder as it happens.
+
+The second job needs no server and no configuration. The agent just runs `coder` commands, like any other shell tool, so only a one-line skill description sits in its context until it actually uses one.
+
+## Install
+
+Open **Help → Install 'coder' command in PATH**. Coder then asks whether to also install its **skill** for your AI agents (see [Teaching your agent](#teaching-your-agent)). Both are kept up to date automatically when Coder updates.
+
+The `coder` command works on macOS and Linux and needs `nc` (netcat), which macOS and most Linux systems include. Inside Coder's own terminals it finds the right Coder instance by itself.
+
+## Opening files and folders
+
+```bash
+coder                      # launch Coder
+coder src/App.tsx          # open a file
+coder my-project/          # open a folder as a project
+```
+
+## Commands for agents (and you)
+
+Beyond plain paths, `coder` takes **scheme commands**, written like URLs. Run `coder --schemes` any time to see exactly what your version supports.
+
+| Command | What it does |
+|---|---|
+| `coder editor://src/App.tsx#42` | Open a file and jump to line 42 |
+| `coder diff://src/App.tsx` | Show a file's uncommitted changes (add `--staged` for staged ones) |
+| `coder diff://commit/HEAD~1/src/App.tsx` | Show what a commit changed in one file |
+| `coder diff://commit/abc123` | List the files a commit changed, so you can pick one |
+| `coder preview://localhost:3000` | Open a URL in Coder's built-in browser (`--split` for a side pane) |
+| `coder preview://docs/README.md` | Show a rendered markdown preview |
+| `coder debug://trace/…` | [Trace code while a command runs](#debug-traces) |
+| `coder debug://doctor` | Check that PHP and Xdebug are ready for tracing |
+
+Paths can be absolute (`editor:///Users/me/app/a.ts`), relative to where you are (`editor://src/a.ts`), or start with `~/`. If a path doesn't exist the command says so and exits with an error instead of opening a blank tab.
+
+### Where things open
+
+Commands go to the Coder window whose project contains your current directory. By default they **never pull Coder to the front** or cover the terminal you're working in: the tab opens in another pane and the window stays where it is. Add `--focus` when you do want Coder raised.
+
+### Diffs
+
+`diff://` shows one file at a time, in the same viewer as the [Git](/git) panel and [Git History](/git-history). If a file has no changes, it tells you instead of opening an empty tab, and points out when the changes are on the other side (staged vs. unstaged).
+
+A commit is named by a single token: a hash, `HEAD~2`, or a tag. For a branch name, use its hash.
+
+## Debug traces
+
+Ask your agent to trace a method and it can do it in one command, with no launch configuration and no debugger setup:
+
+```bash
+coder debug://trace/src/Order.php#42 \
+  --expr='$order->total' --expr='count($items)' \
+  -- vendor/bin/phpunit --filter=testTotal
+```
+
+Coder sets a breakpoint at line 42, runs the command after `--`, and every time that line is hit it reads the expressions you asked for, then lets the program carry on. When the command finishes, the agent gets one compact report:
+
+```
+trace src/Order.php:42 — 3 hits (exit 0, 1.8s)
+ #1 $order->total=120.0  count($items)=3  [Order->total ← CartTest->testTotal]
+ #2 $order->total=75.5   count($items)=2  [Order->total ← CartTest->testTotal]
+ #3 …
+```
+
+That is far cheaper for the agent than stepping through a debugger one command at a time, or sprinkling `var_dump` and re-running.
+
+**Any command works:** `phpunit`, `php artisan …`, `composer test`, a plain `php script.php`.
+
+| Option | Meaning |
+|---|---|
+| `--expr='…'` | An expression to read at every hit. Repeat it for several. |
+| `--cond='$i > 3'` | Only record hits where this is true. |
+| `--max-hits=20` | Stop recording after this many hits (the program still finishes). |
+| `--timeout=60` | Seconds before the command is stopped. |
+| `--stack=3` | How many call-stack frames to include per hit. |
+
+### What you see
+
+You don't have to take the agent's word for it. Every trace appears in Coder's **Debug Console**, in a pane next to your terminal:
+
+```
+━━ Agent trace · src/Order.php:42 · vendor/bin/phpunit --filter=testTotal
+   watching: $order->total   count($items)
+ #1
+      $order->total = 120.0
+      count($items) = 3
+      Order->total ← CartTest->testTotal
+■ 3 hits · exit 0 · 1.8s
+```
+
+It is also saved to the [Debugger](/debugger)'s **Session History**, marked with an **agent** badge, so you can copy it as text or export it to Markdown or HTML like any other debug session. A trace where the breakpoint was never hit is shown in the console but not saved.
+
+### Secrets are masked
+
+Values an agent reads end up in its conversation, so Coder masks anything that looks like a credential before it leaves Coder: names containing `password`, `token`, `secret`, `api_key`, `cookie` and similar, plus environment data (`$_ENV`, `getenv()`). They appear as `«masked»`, including inside an otherwise ordinary object, and masked values are never written to Session History. There is deliberately no switch to turn this off.
+
+### Requirements
+
+PHP is the first supported language. You need the [Xdebug](https://xdebug.org/) extension (version 3) loaded in the PHP that runs the command, and **nothing else**: no VS Code, no debug adapter, no launch configuration, and your `php.ini` is left untouched. Run `coder debug://doctor` to check:
+
+```
+php: /opt/homebrew/bin/php (8.5.6)
+xdebug: loaded (3.5.0)
+ready: PHP traces will work.
+```
+
+<Info>
+A trace works even if your `php.ini` sets `xdebug.start_with_request=no`. Coder gives the traced command its own temporary Xdebug settings for that one run.
+</Info>
+
+If something goes wrong the report says what happened:
+
+- **"the breakpoint was never hit"**: the debugger attached but that line didn't run. Check the line number and that the command exercises that code.
+- **"the command never connected to the debugger"**: Xdebug wasn't active for that command. The message lists what to fix. If the command starts PHP indirectly (Docker, a wrapper that clears the environment), the settings may not reach it.
+
+### Good to know
+
+- One breakpoint per trace, and PHP only for now. More languages are planned.
+- Large arrays and objects are summarized two levels deep (`[…12]`). To look inside, trace a narrower expression such as `$this->lines[0]`.
+- Expressions run inside your program while it is paused, so keep them free of side effects.
+
+## Teaching your agent
+
+Agents don't know about `coder` until they're told. Coder ships a small **skill**, a short instruction file, that does exactly that. The **Install 'coder' command** step offers to put it where your agents look:
+
+| Agent | Location |
+|---|---|
+| Claude Code | `~/.claude/skills/coder/SKILL.md` |
+| Codex | `~/.codex/skills/coder/SKILL.md` |
+| Other agents | `~/.agents/skills/coder/SKILL.md` |
+
+The dialog lists the exact files before it writes anything, and only offers an agent's folder if you already use that agent (the shared `~/.agents` one is always offered).
+
+The skill stays current with Coder. If you'd rather maintain your own copy, delete the line near the top that says it is managed by DevShed Coder and Coder will leave the file alone from then on.
+
+To stop your agent asking permission for every call, allow `coder` commands in its settings. In Claude Code that is the rule `Bash(coder:*)`.
+
+<Info>
+This is separate from the [Skills](/skills) panel, which holds skills for Coder's own built-in assistant.
+</Info>
+
+## Reference
+
+**Exit codes.** `0` success. `1` the command failed (bad path, unknown scheme, trace couldn't attach); the reason is printed. `3` Coder isn't running or can't be reached. The `coder` command never launches Coder for a scheme command.
+
+**`--json`** prints the result as JSON for scripts.
+
+**Safety.** Commands travel over a local socket in your home folder that only your user account can use, and nothing leaves your machine.
+
+## Troubleshooting
+
+**`coder editor://…` opens a blank tab.** An older `coder` is first on your PATH. Run **Help → Install 'coder' command in PATH** again, then open a new terminal.
+
+**"Coder isn't running".** Start Coder first. If you run more than one copy (for example a development build next to the installed app), terminals inside each copy find their own automatically; from any other terminal, point at one with `CODER_CLI_SOCKET=~/.coder/cli.sock`.
+
+**"'nc' (netcat) is required".** Install netcat with your package manager (`brew install netcat`, `apt install netcat-openbsd`).
+
+**A trace says it never connected.** Run `coder debug://doctor`. It shows which PHP was found and whether Xdebug is loaded in it.
