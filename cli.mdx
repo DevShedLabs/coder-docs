@@ -1,6 +1,6 @@
 ---
 title: Command Line & AI Agents
-description: "The coder command opens files from your terminal, and lets Claude Code, Codex, or any CLI agent drive Coder: jump to a line, show a diff, preview a page, and trace PHP code, with no setup."
+description: "The coder command opens files from your terminal, and lets Claude Code, Codex, or any CLI agent drive Coder: jump to a line, show a diff, preview a page, and trace PHP, JavaScript, and TypeScript code, with no setup."
 ---
 
 The `coder` command does two jobs:
@@ -37,7 +37,7 @@ Beyond plain paths, `coder` takes **scheme commands**, written like URLs. Run `c
 | `coder preview://localhost:3000` | Open a URL in Coder's built-in browser (`--split` for a side pane) |
 | `coder preview://docs/README.md` | Show a rendered markdown preview |
 | `coder debug://trace/…` | [Trace code while a command runs](#debug-traces) |
-| `coder debug://doctor` | Check that PHP and Xdebug are ready for tracing |
+| `coder debug://doctor` | Check which languages are ready for tracing |
 
 Paths can be absolute (`editor:///Users/me/app/a.ts`), relative to where you are (`editor://src/a.ts`), or start with `~/`. If a path doesn't exist the command says so and exits with an error instead of opening a blank tab.
 
@@ -53,7 +53,7 @@ A commit is named by a single token: a hash, `HEAD~2`, or a tag. For a branch na
 
 ## Debug traces
 
-Ask your agent to trace a method and it can do it in one command, with no launch configuration and no debugger setup:
+Ask your agent to trace a method and it can do it in one command, with no launch configuration and no debugger setup. It works for **PHP**, **JavaScript**, and **TypeScript**:
 
 ```bash
 coder debug://trace/src/Order.php#42 \
@@ -72,7 +72,13 @@ trace src/Order.php:42 — 3 hits (exit 0, 1.8s)
 
 That is far cheaper for the agent than stepping through a debugger one command at a time, or sprinkling `var_dump` and re-running.
 
-**Any command works:** `phpunit`, `php artisan …`, `composer test`, a plain `php script.php`.
+**Any command works.** For PHP: `phpunit`, `php artisan …`, `composer test`, a plain `php script.php`. For Node: `npm test`, `vitest run`, `jest`, `tsx script.ts`, `node server.js`, and the child processes they start.
+
+The same thing in a TypeScript project, tracing the line by its **original** `.ts` file and line number:
+
+```bash
+coder debug://trace/src/order.ts#9 --expr='line.price' --expr='total' -- npx vitest run order
+```
 
 | Option | Meaning |
 |---|---|
@@ -81,6 +87,23 @@ That is far cheaper for the agent than stepping through a debugger one command a
 | `--max-hits=20` | Stop recording after this many hits (the program still finishes). |
 | `--timeout=60` | Seconds before the command is stopped. |
 | `--stack=3` | How many call-stack frames to include per hit. |
+
+### Set up the debugger without running anything
+
+Add `--dry` and the trace is *prepared* instead of run, so you can take over interactively:
+
+```bash
+coder debug://trace/src/Order.php#67 --dry --expr='$order->total'
+```
+```
+Debug bar prepared — nothing was run.
+  breakpoint: src/Order.php:67  (the dot is drawn in the open editor)
+  watching: $order->total
+  runtime: PHP
+  Coder now has 1 breakpoint set. Press Start Debugging in the Debugger panel to run.
+```
+
+Nothing is executed and no command is needed. If you (or the agent) add the command you'd run, such as `-- php example.php`, Coder also fills in the **Program** and **Args** fields from it. It does that only for a plain script run (`php x.php`, `node x.js`, `vendor/bin/phpunit …`); for anything else, such as `npm test` or `php -r '…'`, it leaves Program as it was. Coder puts the breakpoint in the gutter, adds the expressions to the Watch list, and sets the runtime in the [Debugger](/debugger) panel; you press **Start Debugging**. The output also reports what the editor actually drew: *the dot is drawn*, *the file isn't open yet* (the dot appears when you open it), or a warning if the file is open and the dot is missing, which would be a Coder bug.
 
 ### What you see
 
@@ -96,7 +119,7 @@ You don't have to take the agent's word for it. Every trace appears in Coder's *
 ■ 3 hits · exit 0 · 1.8s
 ```
 
-It is also saved to the [Debugger](/debugger)'s **Session History**, marked with an **agent** badge, so you can copy it as text or export it to Markdown or HTML like any other debug session. A trace where the breakpoint was never hit is shown in the console but not saved.
+It is also saved to the [Debugger](/debugger)'s **Session History**, marked with an **agent** badge. From there you can **step through** the recording hit by hit (the editor opens each file at the right line), **rerun** the trace, copy it as text, or export it to Markdown or HTML. The trace's breakpoint, expressions, and runtime are also placed in the debug bar, ready to use interactively. A trace where the breakpoint was never hit is shown in the console but not saved.
 
 ### Secrets are masked
 
@@ -104,28 +127,63 @@ Values an agent reads end up in its conversation, so Coder masks anything that l
 
 ### Requirements
 
-PHP is the first supported language. You need the [Xdebug](https://xdebug.org/) extension (version 3) loaded in the PHP that runs the command, and **nothing else**: no VS Code, no debug adapter, no launch configuration, and your `php.ini` is left untouched. Run `coder debug://doctor` to check:
+Nothing beyond the language itself. No VS Code, no debug adapter, no launch configuration, and your own settings files are left untouched.
+
+| Language | You need |
+|---|---|
+| PHP | The [Xdebug](https://xdebug.org/) extension (version 3) loaded in the PHP that runs the command |
+| JavaScript / TypeScript | Node.js 18 or newer. TypeScript works however you run it (`tsx`, `ts-node`, `vitest`, `jest`, or compiled output with source maps) |
+
+Run `coder debug://doctor` to see which languages are ready, which file types each one covers, and which aren't supported yet (add `--json` for a machine-readable list):
 
 ```
-php: /opt/homebrew/bin/php (8.5.6)
-xdebug: loaded (3.5.0)
-ready: PHP traces will work.
+PHP (Xdebug, native DBGp): ready
+  files: .php .phtml .inc
+  php: /opt/homebrew/bin/php (8.5.6)
+  xdebug: loaded (3.5.0)
+
+JavaScript / TypeScript (Node inspector): ready
+  files: .js .mjs .cjs .jsx .ts .mts .cts .tsx
+  node: /opt/homebrew/bin/node (v26.2.0)
+
+Not yet supported in debug:// (the Debugger panel handles these interactively): Go, Python, Rust, Ruby, C/C++, Zig, Swift
 ```
+
+`coder --schemes` lists the same languages and file types, so an agent can find out what's available without trying.
+
+### Languages that aren't supported yet
+
+Trace a file in a language `debug://` doesn't cover yet, such as Go, and the command says so plainly instead of failing obscurely:
+
+```
+This language (Go) is not yet supported in the debug:// command. Supported now: PHP (.php .phtml .inc), JavaScript / TypeScript (.js .mjs …). Coder's Debugger panel can debug Go interactively.
+```
+
+For the languages Coder's [Debugger](/debugger) panel already handles (Go, Python, Rust, Ruby, C/C++, Zig, Swift), the message points you there. Nothing is run. Support for more languages is planned.
 
 <Info>
-A trace works even if your `php.ini` sets `xdebug.start_with_request=no`. Coder gives the traced command its own temporary Xdebug settings for that one run.
+A PHP trace works even if your `php.ini` sets `xdebug.start_with_request=no`. Coder gives the traced command its own temporary Xdebug settings for that one run.
 </Info>
 
 If something goes wrong the report says what happened:
 
 - **"the breakpoint was never hit"**: the debugger attached but that line didn't run. Check the line number and that the command exercises that code.
-- **"the command never connected to the debugger"**: Xdebug wasn't active for that command. The message lists what to fix. If the command starts PHP indirectly (Docker, a wrapper that clears the environment), the settings may not reach it.
+- **"the command never connected to the debugger"**: the debugger wasn't active for that command, and the message lists what to fix. If the command starts PHP or Node indirectly (Docker, `sudo`, a wrapper that clears the environment), the settings may not reach it.
+- **"the breakpoint … was moved … to line N"** (JavaScript/TypeScript): the line you chose has no code (a comment, a blank line, or a function that hasn't run yet), so Node moved the breakpoint. Hits are always reported at the line where the program actually stopped.
+- **"line N … is a comment" / "is a blank line"** (PHP): Xdebug never moves a breakpoint, so a breakpoint on a line with no code can never be hit, and Coder tells you when that's why a trace recorded nothing. Put the breakpoint on the first line of the statement; the continuation lines of a multi-line statement never stop.
 
 ### Good to know
 
-- One breakpoint per trace, and PHP only for now. More languages are planned.
-- Large arrays and objects are summarized two levels deep (`[…12]`). To look inside, trace a narrower expression such as `$this->lines[0]`.
+- One breakpoint per trace.
+- Large arrays and objects are summarized two levels deep (`[…12]`). To look inside, trace a narrower expression such as `$this->lines[0]` or `order.lines[0]`.
 - Expressions run inside your program while it is paused, so keep them free of side effects.
+- **Node:** an expression can only use variables the paused function can actually see. A name the function never touches (for example `require`, or a module-level constant it doesn't use) reports `is not defined`, the same as in a browser's developer tools. Use a variable from the function itself, or a global.
+- **Node:** code running inside a `worker_threads` Worker isn't traced yet. The usual test runners are fine: `vitest` and `jest` use separate processes by default, but `vitest --pool=threads` does not.
+- **Node:** Node prints a few "Debugger listening…" lines on stderr while a trace runs. Coder filters them out of the report.
+- **TypeScript:** when you run the `.ts` file directly (`tsx script.ts`, `vitest`, `ts-node`), even code at the top level of that file is traced. If you run *compiled* JavaScript instead, point the trace at the `.js` file.
+- Bun and Deno aren't supported.
+- **A trace stops *before* its line runs.** A variable assigned on that very line isn't available yet (Node reports `t isn't assigned yet`; PHP reports it undefined). Trace the next line to see the value.
+- **PHP:** a statement made of several parts can stop more than once. `echo $a, $b;` stops once per comma-separated argument, so one execution of that line shows two hits. That's how Xdebug reports it, not a double run.
 
 ## Teaching your agent
 
@@ -151,6 +209,8 @@ This is separate from the [Skills](/skills) panel, which holds skills for Coder'
 
 **Exit codes.** `0` success. `1` the command failed (bad path, unknown scheme, trace couldn't attach); the reason is printed. `3` Coder isn't running or can't be reached. The `coder` command never launches Coder for a scheme command.
 
+**For `debug://trace`, the exit code reports the *trace*, not the command you traced.** `0` means the trace ran and attached, even if the traced command itself failed or was stopped by `--timeout`; the report shows how it ended (for example `exit 3` or `timed out after 60s`). Use `--json` to read the command's own status as `data.exitCode`. A trace that couldn't attach, or whose command didn't start, exits `1`.
+
 **`--json`** prints the result as JSON for scripts.
 
 **Safety.** Commands travel over a local socket in your home folder that only your user account can use, and nothing leaves your machine.
@@ -163,4 +223,4 @@ This is separate from the [Skills](/skills) panel, which holds skills for Coder'
 
 **"'nc' (netcat) is required".** Install netcat with your package manager (`brew install netcat`, `apt install netcat-openbsd`).
 
-**A trace says it never connected.** Run `coder debug://doctor`. It shows which PHP was found and whether Xdebug is loaded in it.
+**A trace says it never connected.** Run `coder debug://doctor`. It shows which PHP or Node was found, and whether Xdebug is loaded in that PHP.
