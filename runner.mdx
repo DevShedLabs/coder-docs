@@ -1,6 +1,6 @@
 ---
 title: Runner Bar
-description: "Run, test, and build your project from the title bar with one click or F5 / F6 / F7."
+description: "Run, test, and build your project from the title bar with one click or F5 / F6 / F7, and stop it with F8."
 ---
 
 The **runner bar** puts your project's **Run**, **Test**, and **Build** commands in the title bar, between the project name and the icons on the right. One click (or one key) runs the command in a terminal tab.
@@ -16,7 +16,7 @@ A project with nothing configured shows a single **Config** button. Click it to 
 - The first time you open Config on a project, empty rows are prefilled with suggestions found in the project files. Nothing is saved until you click **Save**.
 - **Detect from project files** fills any empty rows again. It never overwrites a command you typed.
 
-Once something is configured, the bar shows an icon button for each command: a play triangle for Run, a flask for Test, and a hammer for Build. A sliders icon at the end reopens the configuration. Hover a button to see the exact command and its shortcut.
+Once something is configured, the bar shows an icon button for each command: a play triangle for Run, a flask for Test, and a hammer for Build. A sliders icon at the end reopens the configuration. Hover a button to see the exact command and its shortcut. While something is running, a red Stop button also appears (see [Stopping a command](#stopping-a-command)).
 
 ### Runners
 
@@ -49,6 +49,14 @@ By default Run, Test, and Build **share one terminal tab** called *Runner*. Clic
 
 To get a fresh terminal on every click, turn on **Open a new tab for each run** for that row. The tab is named after the action and stays open until you close it.
 
+## Stopping a command
+
+While a command started from the bar is running, its button pulses and a red **Stop** button appears after the three buttons. Click it, or press **F8**, to send Ctrl-C to every runner terminal that is running something.
+
+Coder remembers which terminals the runner started, so Stop only touches those, never your own terminals. It also checks that a command is actually running first, so pressing F8 at an idle prompt does nothing (you'll see a short "Nothing from the runner is running" message). In *new tab* mode it stops every runner tab that still has a command going, including older ones.
+
+If a program ignores Ctrl-C, close its terminal tab.
+
 ## Shortcuts
 
 | Shortcut | Action |
@@ -56,7 +64,8 @@ To get a fresh terminal on every click, turn on **Open a new tab for each run** 
 | F5 | Run |
 | F6 | Test |
 | F7 | Build |
+| F8 | Stop |
 
-They work anywhere in the app, including inside the editor and the terminal. If a command isn't configured yet, the key opens the configuration window. Rebind them in **Settings → Keybindings** (Run Project, Test Project, Build Project).
+They work anywhere in the app, including inside the editor and the terminal. If Run, Test, or Build isn't configured yet, its key opens the configuration window. F8 only acts while a runner command is running. Rebind them in **Settings → Keybindings** (Run Project, Test Project, Build Project, Stop Running Command).
 
-<Info>These aren't F1–F3 on purpose: the editor already uses F1 (command palette), F2 (rename symbol), and F3 (find next). On a Mac, F5–F7 may need the fn key held unless "Use F1, F2, etc. keys as standard function keys" is on in System Settings.</Info>
+<Info>These aren't F1–F3 on purpose: the editor already uses F1 (command palette), F2 (rename symbol), and F3 (find next). On a Mac, F5–F8 may need the fn key held unless "Use F1, F2, etc. keys as standard function keys" is on in System Settings.</Info>
