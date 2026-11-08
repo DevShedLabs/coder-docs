@@ -1,0 +1,62 @@
+---
+title: Runner Bar
+description: "Run, test, and build your project from the title bar with one click or F5 / F6 / F7."
+---
+
+The **runner bar** puts your project's **Run**, **Test**, and **Build** commands in the title bar, between the project name and the icons on the right. One click (or one key) runs the command in a terminal tab.
+
+Commands are saved per project, on your machine in `~/.coder`, never in the repo. They don't show up in git and aren't shared with teammates.
+
+## Set it up
+
+A project with nothing configured shows a single **Config** button. Click it to open the configuration window.
+
+- Each of the three rows (Run, Test, Build) has a **runner** and a **command**.
+- Leave a command empty to hide that button.
+- The first time you open Config on a project, empty rows are prefilled with suggestions found in the project files. Nothing is saved until you click **Save**.
+- **Detect from project files** fills any empty rows again. It never overwrites a command you typed.
+
+Once something is configured, the bar shows an icon button for each command: a play triangle for Run, a flask for Test, and a hammer for Build. A sliders icon at the end reopens the configuration. Hover a button to see the exact command and its shortcut.
+
+### Runners
+
+The runner is the tool that executes the command.
+
+| Runner | What it does |
+|---|---|
+| **php**, **node**, **python** | Interpreters. The command holds just the script and arguments: runner `php` with command `php/test.php` runs `php php/test.php`. A command that already starts with the interpreter (`php -S localhost:8000`) is left as is. Python runs as `python3`. |
+| **npm**, **pnpm**, **yarn**, **bun**, **composer**, **go**, **cargo**, **make** | Tools. The command is the full command line, such as `npm run build`. |
+| **Custom** | Any shell command. |
+
+Picking a runner fills in a sensible command for that row, unless you've already edited it. The window shows the final line under each row (**Runs: …**) so you can see exactly what will be typed.
+
+### What gets detected
+
+| Found in project | Suggests |
+|---|---|
+| `package.json` scripts | `dev` / `start` / `serve` for Run, `test`, `build`. The runner follows the lockfile: npm, pnpm, yarn, or bun. |
+| `composer.json` or `phpunit.xml` | `composer test` or `vendor/bin/phpunit` |
+| `Cargo.toml` | `cargo run`, `cargo test`, `cargo build` |
+| `go.mod` | `go run .`, `go test ./...`, `go build ./...` |
+| `pytest.ini` or `pyproject.toml` | `python3 -m pytest` |
+| `Makefile` | `make run`, `make test`, `make build` for targets that exist |
+
+## Where the output goes
+
+Commands run in the project root in a normal terminal tab. Coder doesn't parse the output, so it works the same for every language and tool, including colors, prompts, and Ctrl-C.
+
+By default Run, Test, and Build **share one terminal tab** called *Runner*. Clicking again sends Ctrl-C first and then the command, so re-running Run restarts a dev server instead of typing into it.
+
+To get a fresh terminal on every click, turn on **Open a new tab for each run** for that row. The tab is named after the action and stays open until you close it.
+
+## Shortcuts
+
+| Shortcut | Action |
+|---|---|
+| F5 | Run |
+| F6 | Test |
+| F7 | Build |
+
+They work anywhere in the app, including inside the editor and the terminal. If a command isn't configured yet, the key opens the configuration window. Rebind them in **Settings → Keybindings** (Run Project, Test Project, Build Project).
+
+<Info>These aren't F1–F3 on purpose: the editor already uses F1 (command palette), F2 (rename symbol), and F3 (find next). On a Mac, F5–F7 may need the fn key held unless "Use F1, F2, etc. keys as standard function keys" is on in System Settings.</Info>
