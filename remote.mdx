@@ -1,0 +1,140 @@
+---
+title: Remote
+description: "Get messages from your agents on Telegram or Slack while you're away from the desk, and reply to keep the work going."
+---
+
+Long agent runs don't need you watching the screen. **Remote** lets an agent message you on your phone when it finishes, when it's blocked on a question, or whenever it decides you should know something. You can reply from the same app and the answer goes straight back into the chat.
+
+- **Telegram and Slack** you create your own bot (a few minutes, once), so nothing runs on anyone else's server and no messages pass through Coder's
+- **Agent-initiated or automatic** the agent has a `notify_user` tool, and you can also have Coder message you when a long turn finishes or the agent asks a question
+- **Two-way** reply to a message and your reply lands in the session that sent it
+- **Private by default** off until you enable it, secrets are scrubbed before anything leaves your machine, and the agent never chooses where a message goes
+
+## Turning it on
+
+Everything is under **Settings → Remote**.
+
+1. Set up a channel below (Telegram, Slack, or both).
+2. Turn on **Allow agents to message me**. This is what gives agents the `notify_user` tool.
+3. Optionally pick a **Primary channel**. If you don't, Coder uses whichever channels are connected.
+4. Click **Save**. The switches and numbers apply on Save; connecting and disconnecting a channel happens immediately.
+
+<Info>Remote is off until you turn it on. With it off, agents don't even see the tool.</Info>
+
+## Telegram
+
+1. In Telegram, open a chat with **@BotFather** and send `/newbot`. Pick a name and a username ending in `bot`.
+2. BotFather replies with a **token** that looks like `123456789:AAH…`. Copy it.
+3. In **Settings → Remote**, paste the token into the Telegram card and click **Connect**. Coder checks it with Telegram before saving anything.
+4. The card now shows a one-time code and your bot's name. In Telegram, open your bot and send `/start 123456` (with your own code).
+5. The bot replies **Paired with DevShed Coder** and the card turns **Connected**.
+6. Click **Send test**. A message should arrive within a second or two.
+
+The pairing code is what stops a stranger who finds your bot from claiming it. After pairing, Coder only listens to your chat and ignores everyone else.
+
+## Slack
+
+The simplest setup is a private app in your own workspace that you **talk to by direct message**. Everything runs on your machine: Coder connects out to Slack, so there's no URL to expose and no server to run.
+
+1. In Settings → Remote, click **Copy app manifest** on the Slack card.
+2. Go to [api.slack.com/apps](https://api.slack.com/apps), choose **Create New App → From a manifest**, pick your workspace, and paste the manifest. Create the app.
+3. On the app page, click **Install to Workspace** and allow it.
+4. Open **OAuth & Permissions** and copy the **Bot User OAuth Token** (starts with `xoxb-`).
+5. Open **Basic Information → App-Level Tokens**, click **Generate Token and Scopes**, add the `connections:write` scope, and copy the token (starts with `xapp-`). A manifest can't create this one, so it's a manual step.
+6. Paste both tokens into the Slack card and click **Connect**.
+7. In Slack, find your app under **Apps** in the sidebar and open a direct message with it. Send `pair 123456` (with the code shown on the card).
+8. The app replies **Paired with DevShed Coder** and the card turns **Connected**. Click **Send test**.
+
+Messages arrive as DMs from the app, and only DMs from you are ever acted on. Channel messages, other people, and other bots are ignored.
+
+<Info>If your workspace restricts who can add apps, an admin has to approve it first. A personal or small-team workspace usually doesn't need that.</Info>
+
+<Accordion title="The manifest">
+
+```json
+{
+  "display_information": {
+    "name": "DevShed Coder",
+    "description": "Messages from your Coder agents"
+  },
+  "features": {
+    "app_home": {
+      "home_tab_enabled": false,
+      "messages_tab_enabled": true,
+      "messages_tab_read_only_enabled": false
+    },
+    "bot_user": { "display_name": "Coder", "always_online": true }
+  },
+  "oauth_config": { "scopes": { "bot": ["chat:write", "im:history"] } },
+  "settings": {
+    "event_subscriptions": { "bot_events": ["message.im"] },
+    "interactivity": { "is_enabled": false },
+    "org_deploy_enabled": false,
+    "socket_mode_enabled": true,
+    "token_rotation_enabled": false
+  }
+}
+```
+
+It asks for two permissions only: send messages (`chat:write`) and read DMs sent to the app (`im:history`).
+
+</Accordion>
+
+## What a message looks like
+
+Every message names its project, so you can tell them apart when several are running:
+
+```
+[coder] Finished (212s)
+
+Added the Remote settings tab and the Telegram adapter. Typecheck and tests pass.
+
+— ~/www/coder
+```
+
+The footer is the project's folder, so two projects with the same name stay distinguishable.
+
+## Replying
+
+Turn on **Let my replies drive the chat** and click **Save**. Replies from your paired account are then sent to the agent as a chat message.
+
+- **Reply to a specific message** (Telegram: swipe-reply; Slack: reply in its thread) and your answer goes to that exact session.
+- **Send a plain message** and it goes to the most recent session that messaged you. Coder tells you which project received it.
+- If that session was closed, or nothing has messaged you since Coder started, you get a short note back saying so.
+
+The agent answers by calling `notify_user`, so the reply shows up in the same channel. It still asks for permission in Coder before risky actions, the same as when you type.
+
+<Warning>A reply is delivered through the **sidebar chat**, so it has to be open in the window that owns the session. If it's closed or collapsed, the reply is dropped without a notice.</Warning>
+
+## Automatic messages
+
+Besides the agent deciding to message you, two optional toggles in Settings → Remote send one for you:
+
+- **Message me when a long turn finishes** sends the agent's final message if the turn took longer than the number of seconds you set (default 120).
+- **Message me when the agent is blocked on a question** sends the question as soon as the agent asks it.
+
+## Safety
+
+Messages leave your machine for a third party, so Coder treats them carefully:
+
+- **The agent can't pick the destination.** `notify_user` takes only a subject and a body. Where it goes comes from your settings alone, so an agent steered by a malicious file can't send your code to some other address.
+- **Credentials are masked.** Before sending, Coder replaces API keys, tokens, private keys, JWTs, and `.env`-style lines such as `DB_PASSWORD=…` with `[redacted]`. It also masks your own saved keys by exact value. This is pattern matching, so it reduces risk but isn't a guarantee. Don't rely on it for real secrets.
+- **Rate limited.** **Max messages per hour** (default 30) is a per-project brake against a looping agent, with an overall ceiling of three times that. The counter resets when Coder restarts.
+- **Only you can reply.** Pairing locks each channel to one account, and everyone else is ignored.
+- **Tokens stay local.** Bot and app tokens are stored encrypted with your operating system's keychain and are never shown to the interface, only whether a channel is connected.
+- **Everything is logged.** Each message sent, after masking, is appended to `~/.coder/remote-log/<date>.jsonl` so you can see exactly what left the machine.
+
+## Troubleshooting
+
+| Symptom | What to check |
+|---|---|
+| Card says **Not verified** | Pairing isn't finished. Send the exact command shown on the card (`/start 123456` or `pair 123456`) to the bot. |
+| **Connect** fails | Check you pasted the right token in the right box. Slack bot tokens start with `xoxb-`, app-level tokens with `xapp-`. |
+| Slack says the app token was rejected | The app-level token needs the `connections:write` scope. |
+| **Send test** works but the agent never messages you | **Allow agents to message me** is off, or you haven't clicked Save. |
+| "Rate limit reached" | Raise **Max messages per hour**, or wait. It's counted per project. |
+| Replies do nothing | **Let my replies drive the chat** is off or unsaved, the sidebar chat is closed, or you're not replying from the paired account. |
+| Reply went to the wrong project | Reply directly to the message you mean. A plain message goes to the most recent one. |
+| Replies stopped after restarting Coder | Reply routing is kept in memory. Wait for the agent's next message and reply to that. |
+
+To disconnect, click **Disconnect** on the channel's card. That removes its saved tokens and pairing.
