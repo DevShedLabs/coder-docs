@@ -29,6 +29,7 @@ Coder ships with a small set of default skills, seeded into `~/.coder/skills/` o
 | `design` | Guidance for building or reviewing any web UI, independent of CSS framework (Tailwind, Bootstrap, plain CSS, etc). |
 | `math-formulas` | When to render LaTeX math via KaTeX instead of ASCII approximations, in chat, markdown, kanban cards, or mindmap labels. |
 | `mermaid-mindmap` | How to create/edit a `.mindmap.md` file that Coder renders as an interactive canvas. |
+| `coder-command-hints` | How to write a command-hint spec (`~/.coder/completions/<command>.json`) so the terminal suggests subcommands, flags and values for a CLI Coder doesn't know. See [Custom Command Hints](/custom-hints). |
 | `create-skill` | Walks the user through authoring a new skill. Not model-invocable on its own (`disable-model-invocation: true`) — it's a guided workflow, not something the agent reaches for mid-task. |
 
 These stay in sync with the [`coder-skills`](https://github.com/DevShedLabs/coder-skills) repo — a periodic and manual sync keeps `~/.coder/skills/` current as new default skills are added there.

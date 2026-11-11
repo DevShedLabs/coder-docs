@@ -60,6 +60,7 @@
 					},
 					"debugger",
 					"terminal",
+					"custom-hints",
 					"runner",
 					"cli",
 					"search",

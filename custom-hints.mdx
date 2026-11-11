@@ -1,0 +1,73 @@
+---
+title: Custom Command Hints
+description: "Teach the terminal's command hints about your own CLI tools with a small JSON file."
+---
+
+[Command hints](/terminal) know git, npm, docker and hundreds of other tools out of the box. For anything else, such as a personal script, an internal tool or a brand-new CLI, you describe the command once in a **spec file** and the hints work for it from then on.
+
+## Add a spec
+
+1. Create the folder `~/.coder/completions/` if it doesn't exist. (Dev builds of Coder use `~/.coder-dev/completions/`.)
+2. Save a JSON file named after the command, exactly as you type it: the spec for `devscan` is `devscan.json`.
+3. Open a Coder terminal and type the command followed by a space.
+
+There is nothing to restart. Coder re-reads the file whenever it changes, so you can edit it while a terminal is open and see the result on the next keystroke.
+
+<Tip>You don't have to write the file by hand. Install the [`coder-command-hints`](https://github.com/DevShedLabs/coder-skills) skill from the `coder-skills` repo (it syncs into `~/.coder/skills/` with the other default skills, and works in Claude Code and Codex too), then ask your AI agent to "write Coder terminal hints for `mytool`". It reads the tool's `--help` output, writes the spec, and checks it with the skill's validator.</Tip>
+
+## A small example
+
+```json
+{
+  "name": "mytool",
+  "description": "Does useful things",
+  "options": [
+    { "name": "--verbose", "description": "More output", "isPersistent": true },
+    { "name": ["-f", "--format"], "description": "Output format",
+      "args": { "name": "format", "suggestions": ["table", "json"] } }
+  ],
+  "subcommands": [
+    { "name": "scan", "description": "Scan a folder",
+      "options": [{ "name": "--path", "args": { "name": "dir", "template": "folders" } }] },
+    { "name": ["deploy", "ship"], "description": "Deploy",
+      "args": { "name": "env", "suggestions": ["staging", "production"] } }
+  ]
+}
+```
+
+With that saved as `mytool.json`:
+
+- `mytool ` lists `scan` and `deploy` (and `ship`, the alias).
+- `mytool scan --` lists `--path` and `--verbose`, because `--verbose` is marked persistent and applies in every subcommand.
+- `mytool scan --path ` lists the folders in your current directory.
+- `mytool deploy ` lists `staging` and `production`.
+
+## Reference
+
+| Field | What it does |
+|---|---|
+| `name` | The command, subcommand or flag. Use an array for aliases, e.g. `["-o", "--output"]`. |
+| `description` | Short text shown beside the hint. |
+| `subcommands` | A list of subcommands, each written the same way. They can nest as deep as you need. |
+| `options` | The flags. `isPersistent: true` makes a flag valid in every subcommand below it, which is right for global flags. `isRepeatable: true` lets it appear more than once. |
+| `args` | What a flag or command takes after it. Give a flag `args` when it takes a value (`--format json`); leave `args` off for an on/off switch. Use a list for several positional values. |
+| `args.suggestions` | A fixed list of values. Each is a string, or an object like `{ "name": "json", "description": "Machine-readable" }`. |
+| `args.template` | `"filepaths"` suggests files and folders; `"folders"` suggests folders only. |
+| `args.isOptional`, `args.isVariadic` | The value may be left out / accepts several values. |
+| `args.generators` | Get values by running a command: `[{ "script": ["mytool", "list-envs"], "splitOn": "\n" }]`. One value per output line. |
+| `hidden`, `deprecated` | Keep an entry out of the list. |
+
+<Info>A `generators` script may only run the same command you are typing (`mytool` in the example), and it runs as you type, so keep it quick. Results are cached for a few seconds.</Info>
+
+The format is a subset of the open [Fig autocomplete spec](https://github.com/withfig/autocomplete) format, so specs from that project work here if they are plain data (no functions).
+
+## Built-in specs
+
+A spec in your `completions` folder **replaces** the built-in one of the same name. Use that to trim a noisy built-in list, or to add your own subcommands. Delete the file to go back to the built-in.
+
+## If hints don't show up
+
+- **The file name must match the command exactly.** `Mytool.json` won't match `mytool`.
+- **The JSON must be valid.** No comments, no trailing commas. Coder ignores a file it can't parse and writes a line about it to the app log. Check it with `node -e "JSON.parse(require('fs').readFileSync('mytool.json','utf8'))"`.
+- **Hints only work in zsh and bash terminals** opened inside Coder, and only when **Settings > General > Terminal > Command hints** is on.
+- **A flag that takes a value but has no `args`** makes the next word complete as a flag instead of a value, and the reverse for a switch that has `args`.

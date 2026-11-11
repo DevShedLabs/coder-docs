@@ -1,6 +1,6 @@
 ---
 title: Terminal
-description: "Integrated PTY terminal with multiple renameable tabs."
+description: "Integrated PTY terminal with multiple renameable tabs and command hints as you type."
 ---
 
 - **Integrated terminal** full PTY terminal running your system shell (zsh/bash), opens in the sidebar
@@ -10,8 +10,33 @@ description: "Integrated PTY terminal with multiple renameable tabs."
 - **Workspace-aware** with more than one root open (see [Workspaces & Worktrees](/workspaces)), each file tree section has its own "New Terminal Here" button, and terminal tabs show a badge for which root they're in
 - **Persistent sessions** terminal tabs survive panel switches and layout changes
 
+- **Auto-named tabs** a new terminal is named after the first command you run in it (`npm run dev` becomes "npm"; `cd core` becomes "core"). Renaming a tab yourself turns this off for that tab.
 
-## Shotcut Key Commands
+## Command hints
+
+As you type, a list of suggestions appears at the cursor:
+
+- **Subcommands and flags** for hundreds of tools (git, npm, docker, kubectl, and more). `git ch` offers `checkout` and `cherry-pick`; `git commit --am` offers `--amend`.
+- **Branches and tags** where a command takes them, such as `git checkout `.
+- **Paths**, for commands that take files or folders, and for `cd`.
+- **Commands on your PATH** for the first word of a line, including anything your shell setup adds (nvm, Homebrew, and so on).
+
+Hints never come from your shell history. For tools Coder doesn't know, such as your own scripts, see [Custom Command Hints](/custom-hints).
+
+| Key | Action |
+|---|---|
+| Down | Pick the first suggestion, then move down the list |
+| Up | Move up the list (with nothing picked, Up still walks your shell history) |
+| Tab or Enter | Accept the picked suggestion |
+| Esc | Close the list |
+
+Until you pick something with Down, the terminal behaves exactly as it always has: Tab runs your shell's own completion and Enter runs the line.
+
+Command hints work in **zsh** and **bash**. Coder loads a small integration script when it starts the shell (your own `.zshrc` / `.bashrc` still run as normal) so it can see the line you're typing. Other shells, such as fish, run without hints and without tab auto-naming. Turn hints off under **Settings > General > Terminal**; the change applies to new terminals.
+
+<Info>If you use a prompt framework that rebuilds the prompt on every keystroke and hints stop appearing, open an issue with the framework name. Hints rely on the shell reporting where your prompt ends.</Info>
+
+## Shortcut Key Commands
 
 | Shortcut | Action |
 |---|---|
