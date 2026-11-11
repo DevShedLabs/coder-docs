@@ -65,6 +65,12 @@ The format is a subset of the open [Fig autocomplete spec](https://github.com/wi
 
 A spec in your `completions` folder **replaces** the built-in one of the same name. Use that to trim a noisy built-in list, or to add your own subcommands. Delete the file to go back to the built-in.
 
+## Cloud CLIs: aws, gcloud and az
+
+To keep the app small, the huge subcommand trees for the **AWS CLI (`aws`), Google Cloud (`gcloud`) and Azure CLI (`az`)** are not bundled. Typing `aws `, `gcloud ` or `az ` still lists the services or command groups, but hints stop below that level (`aws s3 ` and `az vm ` show nothing).
+
+If you want hints for one of them, ask your AI agent to use the `coder-command-hints` skill to generate a spec for the part you use, for example "write Coder terminal hints for the `aws s3` and `aws ec2` commands". Keep it to the services you actually run: your file **replaces** the built-in spec for that command, so anything you leave out is no longer suggested.
+
 ## If hints don't show up
 
 - **The file name must match the command exactly.** `Mytool.json` won't match `mytool`.
