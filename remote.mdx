@@ -94,12 +94,18 @@ Added the Remote settings tab and the Telegram adapter. Typecheck and tests pass
 
 The footer is the project's folder, so two projects with the same name stay distinguishable.
 
+## Connecting a chat
+
+In the chat box's button row, next to Send, there's a phone icon (**Connect remote**, shown once Remote is on and a channel is connected). Click it to link that chat to your phone: Coder posts a short **Connected** message to your channel, and your replies come back to this chat. It doesn't involve the model at all, so it costs no tokens, and the agent doesn't have to message you first.
+
+Click it in whichever chat you want to talk to from your phone. The most recently connected chat is where plain (non-reply) messages go.
+
 ## Replying
 
 Turn on **Let my replies drive the chat** and click **Save**. Replies from your paired account are then sent to the agent as a chat message.
 
 - **Reply to a specific message** (Telegram: swipe-reply; Slack: reply in its thread) and your answer goes to that exact session.
-- **Send a plain message** and it goes to the most recent session that messaged you. Coder tells you which project received it.
+- **Send a plain message** and it goes to the most recent session that messaged you or that you connected. Coder tells you which project received it.
 - If that session was closed, or nothing has messaged you since Coder started, you get a short note back saying so.
 
 The agent answers by calling `notify_user`, so the reply shows up in the same channel. It still asks for permission in Coder before risky actions, the same as when you type.
@@ -134,7 +140,7 @@ Messages leave your machine for a third party, so Coder treats them carefully:
 | **Send test** works but the agent never messages you | **Allow agents to message me** is off, or you haven't clicked Save. |
 | "Rate limit reached" | Raise **Max messages per hour**, or wait. It's counted per project. |
 | Replies do nothing | **Let my replies drive the chat** is off or unsaved, the sidebar chat is closed, or you're not replying from the paired account. |
-| Reply went to the wrong project | Reply directly to the message you mean. A plain message goes to the most recent one. |
+| Reply went to the wrong project | Reply directly to the message you mean. A plain message goes to the most recent one. Click **Connect remote** in the chat you want. |
 | Replies stopped after restarting Coder | Reply routing is kept in memory. Wait for the agent's next message and reply to that. |
 
 To disconnect, click **Disconnect** on the channel's card. That removes its saved tokens and pairing.
