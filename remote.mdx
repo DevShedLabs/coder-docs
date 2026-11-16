@@ -7,7 +7,7 @@ Long agent runs don't need you watching the screen. **Remote** lets an agent mes
 
 - **Telegram and Slack** you create your own bot (a few minutes, once), so nothing runs on anyone else's server and no messages pass through Coder's
 - **Agent-initiated or automatic** the agent has a `notify_user` tool, and you can also have Coder message you when a long turn finishes or the agent asks a question
-- **Two-way** reply to a message and your reply lands in the session that sent it
+- **Two-way** reply to a message and your reply lands in the session that sent it, even if the window or project is closed while the agent keeps working
 - **Private by default** off until you enable it, secrets are scrubbed before anything leaves your machine, and the agent never chooses where a message goes
 
 ## Turning it on
@@ -96,21 +96,26 @@ The footer is the project's folder, so two projects with the same name stay dist
 
 ## Connecting a chat
 
-In the chat box's button row, next to Send, there's a phone icon (**Connect remote**, shown once Remote is on and a channel is connected). Click it to link that chat to your phone: Coder posts a short **Connected** message to your channel, and your replies come back to this chat. It doesn't involve the model at all, so it costs no tokens, and the agent doesn't have to message you first.
+With **Link chats automatically** on (Settings → Remote, on by default), you don't have to do anything: a chat is linked to your paired channel the moment it starts a turn, and your replies come back to it. No message is sent when it links. The link is saved to disk, so it survives restarting Coder and closing and reopening the project.
 
-Click it in whichever chat you want to talk to from your phone. The most recently connected chat is where plain (non-reply) messages go.
+You can also link a chat by hand. In the chat box's button row, next to Send, there's a phone icon (**Connect remote**, shown once Remote is on and a channel is connected). Click it and Coder posts a short **Connected** message to your channel. A check mark on the icon means this chat is the linked one. It doesn't involve the model at all, so it costs no tokens, and the agent doesn't have to message you first.
+
+The most recently active (or connected) chat is where plain, non-reply messages go. Turn **Link chats automatically** off if you'd rather only link the chats you click.
 
 ## Replying
 
 Turn on **Let my replies drive the chat** and click **Save**. Replies from your paired account are then sent to the agent as a chat message.
 
 - **Reply to a specific message** (Telegram: swipe-reply; Slack: reply in its thread) and your answer goes to that exact session.
-- **Send a plain message** and it goes to the most recent session that messaged you or that you connected. Coder tells you which project received it.
-- If that session was closed, or nothing has messaged you since Coder started, you get a short note back saying so.
+- **Send a plain message** and it goes to the most recent chat that started a turn, messaged you, or that you connected. Coder tells you which project received it.
+- If the chat can't be found, you get a short note back saying so.
+- **Send "continue"** after the agent stops at its step limit and it carries on.
 
 The agent answers by calling `notify_user`, so the reply shows up in the same channel. It still asks for permission in Coder before risky actions, the same as when you type.
 
-<Warning>A reply is delivered through the **sidebar chat**, so it has to be open in the window that owns the session. If it's closed or collapsed, the reply is dropped without a notice.</Warning>
+A reply to a chat that is still running or still open in Coder is delivered by Coder itself, so it works with the window closed or the project closed. A reply to a chat that has finished and been closed needs the project open with the **sidebar chat** showing, so Coder can load that conversation first. Otherwise you get the "no longer open" note.
+
+<Info>A turn you start from Slack or Telegram always messages you when it finishes, however short it is. You're away from the desk by definition, so the minimum-duration setting doesn't apply to it.</Info>
 
 ## Automatic messages
 
@@ -118,6 +123,16 @@ Besides the agent deciding to message you, two optional toggles in Settings → 
 
 - **Message me when a long turn finishes** sends the agent's final message if the turn took longer than the number of seconds you set (default 120).
 - **Message me when the agent is blocked on a question** sends the question as soon as the agent asks it.
+
+The question setting also covers the other times the agent stops and needs you:
+
+- **A command needs approval.** You get the command, its risk level, and a note to approve it in Coder. The message goes out only if the prompt is still unanswered after a few seconds, so commands you've already allowed for the session don't ping you.
+- **The agent hit its step limit** (25 tool steps in one turn) and stopped without finishing. Reply "continue" to keep going.
+- **The run failed**, for example a bad API key, a rate limit, or a network error.
+
+These messages are also sent if **Message me when a long turn finishes** is on, and always for a turn that came from Slack or Telegram.
+
+<Warning>Commands are approved only in Coder. Slack and Telegram tell you the agent is waiting, but replying "yes" there does nothing, so a compromised chat account can't approve a command on your machine.</Warning>
 
 ## Safety
 
@@ -129,6 +144,7 @@ Messages leave your machine for a third party, so Coder treats them carefully:
 - **Only you can reply.** Pairing locks each channel to one account, and everyone else is ignored.
 - **Tokens stay local.** Bot and app tokens are stored encrypted with your operating system's keychain and are never shown to the interface, only whether a channel is connected.
 - **Everything is logged.** Each message sent, after masking, is appended to `~/.coder/remote-log/<date>.jsonl` so you can see exactly what left the machine.
+- **Chat approval is notify-only.** Commands that need permission are never approved from a chat app.
 
 ## Troubleshooting
 
@@ -141,6 +157,8 @@ Messages leave your machine for a third party, so Coder treats them carefully:
 | "Rate limit reached" | Raise **Max messages per hour**, or wait. It's counted per project. |
 | Replies do nothing | **Let my replies drive the chat** is off or unsaved, the sidebar chat is closed, or you're not replying from the paired account. |
 | Reply went to the wrong project | Reply directly to the message you mean. A plain message goes to the most recent one. Click **Connect remote** in the chat you want. |
-| Replies stopped after restarting Coder | Reply routing is kept in memory. Wait for the agent's next message and reply to that. |
+| Replies stopped after restarting Coder | The link is saved, but the old conversation has to be loaded again. Open the project with the sidebar chat showing, then reply. |
+| No "Finished" message | Short turns under the minimum-duration setting don't send one, unless you started the turn from Slack or Telegram. Check **Message me when a long turn finishes** is on. |
+| Chat shows the phone icon, not the check | It isn't the linked chat. Click the icon, or start a turn in it with **Link chats automatically** on. |
 
 To disconnect, click **Disconnect** on the channel's card. That removes its saved tokens and pairing.

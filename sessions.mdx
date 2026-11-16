@@ -3,7 +3,7 @@ title: Sessions
 description: "Run several AI chats at once, see what each one is doing, resume Claude Code sessions, and place chats in the editor grid to watch multiple streams side by side."
 ---
 
-Every AI chat in Coder is a **session**: its own conversation, its own streaming state, its own message queue. Sessions keep running in the background, so you can start a task in one chat, switch to another, and come back to find the first one finished (or waiting on you).
+Every AI chat in Coder is a **session**: its own conversation, its own streaming state, its own message queue. Sessions keep running in the background, so you can start a task in one chat, switch to another, and come back to find the first one finished (or waiting on you). They keep running even if you close the project or the window; see [Runs keep going](#runs-keep-going).
 
 The **Sessions panel** is the control room for all of them, and any session can be opened as a tab in the editor grid, so you can put chats exactly where you want them and watch several work at the same time.
 
@@ -20,7 +20,7 @@ The panel is scoped to the current project and has two groups:
   - **Error** the last run failed.
 - **History** past sessions from disk that aren't currently open. Click one to open it as a chat tab. The trash icon deletes it permanently.
 
-Click an open session to make it the active chat in the side panel. The ✕ closes it (the conversation stays in History).
+Click an open session to make it the active chat in the side panel. The ✕ closes it and stops it if it's running (the conversation stays in History).
 
 ## Claude Code sessions
 
@@ -61,6 +61,20 @@ Each chat tab shows a status dot, so a chat you aren't looking at can still get 
 | None | Idle |
 
 Open a few sessions in a grid and you can see every stream live, answer a permission prompt in the pane that needs it, and leave the others running.
+
+## Runs keep going
+
+An agent run belongs to Coder, not to the window showing it. So:
+
+- **Close the project, switch projects, or close the window** and a running chat keeps working in the background. Reopen the project and the chat is right where the agent got to, still streaming if it hasn't finished.
+- **History is saved as it goes**: when you send, and after each batch of tool results. If Coder quits or crashes mid-run you keep a partial chat that you can read and continue, instead of losing it.
+- **Reloading the window** (Cmd+R) doesn't interrupt a run either.
+- **Prompts wait for you.** If the agent needs a command approved or asks a question while you're away, it waits (up to 15 minutes, then the request is declined) and shows the prompt again when you come back. With [Remote](/remote) on, you're messaged that it's waiting.
+- **Two windows on the same project** see the same chat. A prompt appears in both, and answering it in one dismisses it in the other.
+
+What does stop a run: pressing Stop, closing that chat's tab with the ✕, or quitting Coder. A run also stops by itself after 25 tool steps without finishing; send a message (or reply "continue" from your phone) to carry on.
+
+A run that is still going when its window closes keeps access only to the folders that were open at that moment. It can't pick up new ones until a window takes it back.
 
 ## Context meter and compression
 
