@@ -27,6 +27,26 @@ The code carries your computer's public key, so the phone can tell it's talking 
 
 To remove a phone, click **Revoke** next to it. It has to pair again to get back in.
 
+## Away from home
+
+By default the phone only reaches your computer on the same network. To use it anywhere, open **Settings → Mobile → Away from home** and use your own Cloudflare tunnel. Coder runs `cloudflared` for you (install it first; on macOS, `brew install cloudflared`), and Cloudflare only ever carries encrypted bytes. There is no Coder server in the path.
+
+- **Quick (no account):** a random `trycloudflare.com` address that changes every time it starts. Good for trying it out.
+- **My tunnel:** your own Cloudflare tunnel token and public hostname, for a permanent address. In the Cloudflare dashboard, point the hostname at `http://localhost:<port>` (the port is shown in Settings and stays the same).
+
+The pairing code includes the tunnel address once it is connected, so a phone paired while the tunnel is up works from anywhere. On a phone that is already paired, use **⋯ → Add tunnel address** and scan the tunnel QR. The projects list shows whether you are connected on your network or through the tunnel, and its menu lets you force one or the other.
+
+## Notifications
+
+Coder can notify your phone when an agent **finishes**, **needs your approval or an answer**, or **stops with an error**. Choose which under **Settings → Mobile → Notifications**. Notifications only say which project and what happened, never what is in the chat.
+
+- **App open or just left:** Coder tells the app directly.
+- **Phone locked or app closed:** Coder sends a push through its notification service, so nothing to set up. Open the app on your phone once and allow notifications when iOS asks. Use **Send test** next to the phone in Settings to check it.
+
+What the service sees: your phone's push address and the project name and event (for example "my-app: Finished"). It never sees chat content, file names, commands or paths on your computer, and it can only send those fixed messages. Forgetting a computer in the app retires the access that computer had.
+
+Tapping a notification opens that chat. Slack or Telegram through [Remote](/remote) still work as an extra channel.
+
 ## Chats
 
 Pick a project, then the **Chats** tab.
@@ -69,6 +89,7 @@ Destructive actions (discarding changes, deleting a branch, force operations) al
 - Phones can only call a fixed list of git and chat operations. They can't run arbitrary commands, read arbitrary files, or reach outside the projects you've opened
 - Pairing codes are single-use and expire in 5 minutes; wrong guesses and connection floods are rate-limited
 - The phone keeps its key in the iOS Keychain, this device only. The computer's identity is encrypted with the OS keychain
+- Notifications to a locked phone go through Coder's push service, which stores only your phone's push address and a hash of a secret. It sends fixed messages (a project name and what happened) and never sees chat content, file names, commands or paths. Forgetting a computer in the app cuts off that computer's access to your phone
 - A paired phone can run git and chat with agents in your projects, so only pair phones you own. Revoke a lost phone straight away from **Settings → Mobile**
 
 ## Troubleshooting
@@ -84,10 +105,10 @@ Destructive actions (discarding changes, deleting a branch, force operations) al
     Codes last 5 minutes and work once. Click **New code**.
   </Accordion>
   <Accordion title="No notification when the agent finishes">
-    iOS pauses the app's connection when it's in the background, and there is no Coder push service. To be told while you're away, set up [Remote](/remote) (Telegram or Slack) alongside the phone app.
+    iOS pauses the app's connection when it's in the background. Check that notifications are allowed for Coder Remote in iOS Settings, that the phone shows **Notifications on** under Settings → Mobile → Notifications (open the app once if it says Not set up), and that **Send test** arrives.
   </Accordion>
 </AccordionGroup>
 
 ## Limits today
 
-Same network only (tunnel support is planned). No file browser or attachments yet. The task board shown is the open project's. Claude Code session history and live terminals from the phone are planned.
+Away from home needs your own Cloudflare tunnel. Notifications reach a locked phone but can't yet be answered from the lock screen: open the app to approve. No file browser or attachments yet. The task board shown is the open project's. Claude Code session history and live terminals from the phone are planned.
