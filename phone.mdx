@@ -1,0 +1,93 @@
+---
+title: Phone
+description: "Control Coder from your iPhone: chat with agents, start new chats, use git, and work your project's task board. Connects straight to your computer, end-to-end encrypted, with no Coder server in between."
+---
+
+The **Coder Remote** iPhone app is a remote control for this computer. Your agents keep running here; the phone lets you check on them, answer them, start new work, and commit from wherever you are.
+
+- **Direct and private** your phone connects straight to Coder on your computer. There is no Coder server in between, and everything is end-to-end encrypted (Noise protocol, the same family WireGuard uses)
+- **Chats** continue any chat session, start a new one, stop or steer an agent, and approve or answer its questions
+- **Tasks** your project's [Board](/kanban) on the phone, with a button that hands a task to an agent
+- **Git** status, diffs, stage, commit (with an AI-written message if you like), push, pull, and branches
+- **Live** when files or git state change on the computer, the phone refreshes
+- **Only paired phones** a phone has to be paired with a code you show on the computer, and you can remove it at any time
+
+<Info>Today the phone and computer must be on the same network (home Wi-Fi, for example). Reaching your computer from anywhere through a tunnel you own is planned.</Info>
+
+## Connecting a phone
+
+Open the phone panel from the **phone icon in the title bar**, or **Settings → Mobile**.
+
+1. Turn on **Allow my phone to connect**. Coder starts listening on a port; nothing listens while this is off.
+2. Click **Show pairing code**. A QR code appears, valid for **5 minutes** and **one use**.
+3. In the Coder Remote app, choose **Add computer** and scan the code. Allow **Local Network** access when iOS asks, since that's how the phone finds your computer.
+4. The phone appears under **Paired phones** and shows **Connected now** while it's online.
+
+The code carries your computer's public key, so the phone can tell it's talking to the right machine and not an impostor. After pairing, the phone is recognised by its own key and the code is useless.
+
+To remove a phone, click **Revoke** next to it. It has to pair again to get back in.
+
+## Chats
+
+Pick a project, then the **Chats** tab.
+
+- **New chat** the button at the top of the list starts a fresh session. (Before, you could only continue old ones.)
+- **Continue** open any previous session and keep going
+- **While an agent works** stop it, steer it with a message, or queue the next message to run after it finishes
+- **Approvals** when the agent wants to run a command or asks you a question, the phone shows the request. The first device to answer wins, so you can answer from the phone or the desktop
+- **Keeps running** a chat started or continued from the phone keeps working if you close the project or window on the computer
+
+If nobody answers an approval for 15 minutes it is declined, so an agent never sits waiting forever.
+
+## Tasks
+
+The **Tasks** tab is the project's board, the same `board.json` the [Board panel](/kanban) uses. A task you add on the phone shows up on the desktop straight away, and the other way around.
+
+- Tap a column chip (To Do, Backlog, In Progress, Review, Done) to see its tasks
+- **New task** adds one; swipe a task to move it along or delete it (with a confirmation), or long-press for **Move to…**
+- Tap a task to edit its title and notes, change its column, or delete it
+- Notes can be markdown. Tasks filed by a support system such as Userback arrive as HTML and are converted to readable text: paragraphs, lists, links and screenshot addresses are kept
+
+### Start with agent
+
+On a task, **Start with agent** opens a **new chat** with the task as the first message and the agent begins working.
+
+- The card moves to **In Progress** and is linked to the chat (a bubble icon shows on the row)
+- When the agent finishes cleanly the card moves to **Review**. If you stopped the agent, it failed, or you moved the card yourself, it stays where you put it
+- **Open its chat** jumps back to that conversation later
+
+The agent is given the task as readable text; the card itself is never rewritten.
+
+## Git
+
+The **Git** tab works like the desktop's [git panel](/git): changed files, diffs, stage and unstage, commit, push, pull, branches and history. **Generate commit message** uses your AI model on the computer.
+
+Destructive actions (discarding changes, deleting a branch, force operations) always ask for confirmation **on the phone**.
+
+## Security
+
+- Phones can only call a fixed list of git and chat operations. They can't run arbitrary commands, read arbitrary files, or reach outside the projects you've opened
+- Pairing codes are single-use and expire in 5 minutes; wrong guesses and connection floods are rate-limited
+- The phone keeps its key in the iOS Keychain, this device only. The computer's identity is encrypted with the OS keychain
+- A paired phone can run git and chat with agents in your projects, so only pair phones you own. Revoke a lost phone straight away from **Settings → Mobile**
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="“Couldn't establish a secure connection”">
+    Update both apps. The phone and Coder have to speak the same protocol version. If you rebuilt one side, rebuild the other.
+  </Accordion>
+  <Accordion title="The phone can't find my computer">
+    Check that **Allow my phone to connect** is on, both devices are on the same network, and **Local Network** is allowed for Coder Remote in iOS Settings → Privacy & Security → Local Network. Guest or "client isolation" Wi-Fi networks block device-to-device traffic.
+  </Accordion>
+  <Accordion title="The pairing code says it expired">
+    Codes last 5 minutes and work once. Click **New code**.
+  </Accordion>
+  <Accordion title="No notification when the agent finishes">
+    iOS pauses the app's connection when it's in the background, and there is no Coder push service. To be told while you're away, set up [Remote](/remote) (Telegram or Slack) alongside the phone app.
+  </Accordion>
+</AccordionGroup>
+
+## Limits today
+
+Same network only (tunnel support is planned). No file browser or attachments yet. The task board shown is the open project's. Claude Code session history and live terminals from the phone are planned.
