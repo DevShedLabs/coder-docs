@@ -32,7 +32,11 @@ To remove a phone, click **Revoke** next to it. It has to pair again to get back
 By default the phone only reaches your computer on the same network. To use it anywhere, open **Settings → Mobile → Away from home** and use your own Cloudflare tunnel. Coder runs `cloudflared` for you (install it first; on macOS, `brew install cloudflared`), and Cloudflare only ever carries encrypted bytes. There is no Coder server in the path.
 
 - **Quick (no account):** a random `trycloudflare.com` address that changes every time it starts. Good for trying it out.
-- **My tunnel:** your own Cloudflare tunnel token and public hostname, for a permanent address. In the Cloudflare dashboard, point the hostname at `http://localhost:<port>` (the port is shown in Settings and stays the same).
+- **My tunnel:** your own Cloudflare tunnel with a permanent address. You need a domain on your Cloudflare account. Enter a tunnel name and a hostname (for example `coder-desktop` and `tunnel.example.com`) and click **Set up and connect**. The first time, your browser opens so you can sign in to Cloudflare and pick the domain; Coder then creates the tunnel and its DNS record and keeps it running.
+
+<Warning>Do not create a tunnel in the Cloudflare dashboard for this. Coder makes it itself, and the name you enter must not already belong to one of your tunnels. If you change the name or hostname, Coder sets up again. If the tunnel is later deleted in Cloudflare, Coder recreates it on the next connect.</Warning>
+
+If you already have a dashboard-made tunnel you want to use, open **Advanced** in the same panel and paste the install command Cloudflare shows (Coder only reads the token from it, so don't run it). You also add a public hostname in the dashboard that points to `http://localhost:<port>`, and enter the same hostname in Coder.
 
 The pairing code includes the tunnel address once it is connected, so a phone paired while the tunnel is up works from anywhere. On a phone that is already paired, use **⋯ → Add tunnel address** and scan the tunnel QR. The projects list shows whether you are connected on your network or through the tunnel, and its menu lets you force one or the other.
 
