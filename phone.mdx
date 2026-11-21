@@ -1,18 +1,19 @@
 ---
 title: Phone
-description: "Control Coder from your iPhone: chat with agents, start new chats, use git, and work your project's task board. Connects straight to your computer, end-to-end encrypted, with no Coder server in between."
+description: "Capture project ideas on your iPhone or iPad even when your computer is off, and control Coder from anywhere: chat with agents, use git, and work your task boards. Connects straight to your computer, end-to-end encrypted, with no Coder server in between."
 ---
 
-The **Coder Remote** iPhone app is a remote control for this computer. Your agents keep running here; the phone lets you check on them, answer them, start new work, and commit from wherever you are.
+The **Coder Remote** app for iPhone and iPad is a remote control for this computer, and a place to jot down ideas when you are nowhere near it. Your agents keep running here; the phone lets you check on them, answer them, start new work, and commit from wherever you are. You can try the app's [Inbox](#inbox-ideas-without-a-project) before you have Coder or pair anything.
 
 - **Direct and private** your phone connects straight to Coder on your computer. There is no Coder server in between, and everything is end-to-end encrypted (Noise protocol, the same family WireGuard uses)
 - **Chats** continue any chat session, start a new one, stop or steer an agent, and approve or answer its questions
+- **Inbox** write down ideas with no project yet, with or without your computer on. They sync to Coder when the phone connects
 - **Tasks** your project's [Board](/kanban) on the phone, with a button that hands a task to an agent
 - **Git** status, diffs, stage, commit (with an AI-written message if you like), push, pull, and branches
 - **Live** when files or git state change on the computer, the phone refreshes
 - **Only paired phones** a phone has to be paired with a code you show on the computer, and you can remove it at any time
 
-<Info>Today the phone and computer must be on the same network (home Wi-Fi, for example). Reaching your computer from anywhere through a tunnel you own is planned.</Info>
+<Info>On the same network the phone finds your computer on its own. To reach it from anywhere, use [your own Cloudflare tunnel](#away-from-home).</Info>
 
 ## Connecting a phone
 
@@ -50,6 +51,24 @@ Coder can notify your phone when an agent **finishes**, **needs your approval or
 What the service sees: your phone's push address and the project name and event (for example "my-app: Finished"). It never sees chat content, file names, commands or paths on your computer, and it can only send those fixed messages. Forgetting a computer in the app retires the access that computer had.
 
 Tapping a notification opens that chat. Slack or Telegram through [Remote](/remote) still work as an extra channel.
+
+## Staying connected
+
+Chats, tasks and git need a live connection to Coder on your computer. The phone connects when you open the app and tries again by itself when you come back to it after it dropped. If it shows **Connecting…** or an error, tap **Try again**. Coder has to be running, with **Allow my phone to connect** on.
+
+## Inbox: ideas without a project
+
+The **Inbox** is for ideas that don't belong to a project yet. Open it from the top of the project list, or from the pairing and offline screens, so you can use it **before pairing and with your computer off**.
+
+- Add, edit, move between columns, and delete ideas. Everything is saved **on the phone first**, so nothing is lost if you have no connection
+- The status line shows where things stand: **Computer offline · 3 changes waiting to sync** means nothing has reached your computer yet; **Synced with your computer** means it has
+- When the phone connects to Coder, waiting changes are sent automatically and the Inbox is refreshed. Ideas are stored in `~/.coder/global-board.json`, the same file as the [Board's](/kanban) cards with no project, and the Board panel updates as soon as they arrive
+- If an idea is edited in both places before a sync, the **most recent edit wins**. A deletion always wins
+- The **All projects** view shows every project's tasks as of the last time the phone was connected. It is read-only; open a project to change its tasks
+- **Move to a project…** on an idea moves it onto that project's board. This one needs a connection to your computer
+- Ideas sync only while the phone and Coder are both open and connected. There is no background sync. If you forget a computer in the app, your Inbox stays on the phone and syncs to the next computer you pair
+
+<Warning>Ideas not yet synced live only on your phone. They are included in device backups, but sync them to Coder before you trade in or reset the device.</Warning>
 
 ## Chats
 
@@ -105,6 +124,9 @@ Destructive actions (discarding changes, deleting a branch, force operations) al
   <Accordion title="The phone can't find my computer">
     Check that **Allow my phone to connect** is on, both devices are on the same network, and **Local Network** is allowed for Coder Remote in iOS Settings → Privacy & Security → Local Network. Guest or "client isolation" Wi-Fi networks block device-to-device traffic.
   </Accordion>
+  <Accordion title="My ideas say “waiting to sync”">
+    They are safe on the phone but Coder hasn't received them. Make sure Coder is running with **Allow my phone to connect** on, then open the app and tap **Try again** if it shows the connecting screen. They send as soon as the connection is made.
+  </Accordion>
   <Accordion title="The pairing code says it expired">
     Codes last 5 minutes and work once. Click **New code**.
   </Accordion>
@@ -113,6 +135,10 @@ Destructive actions (discarding changes, deleting a branch, force operations) al
   </Accordion>
 </AccordionGroup>
 
+## About and getting Coder
+
+The info button on the pairing screen (and **⋯ → About** later) shows the app version, how your data travels, and links to download Coder. The pairing screen also has a **Download Coder for your computer** button for anyone who installs the app first.
+
 ## Limits today
 
-Away from home needs your own Cloudflare tunnel. Notifications reach a locked phone but can't yet be answered from the lock screen: open the app to approve. No file browser or attachments yet. The task board shown is the open project's. Claude Code session history and live terminals from the phone are planned.
+Away from home needs your own Cloudflare tunnel. Notifications reach a locked phone but can't yet be answered from the lock screen: open the app to approve. No file browser or attachments yet. The Tasks tab shows the open project's board (other projects are read-only under the Inbox's **All projects**). You can't start an agent from an Inbox idea until it is moved to a project. Claude Code session history and live terminals from the phone are planned.

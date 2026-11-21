@@ -10,7 +10,7 @@ description: "Task board for the current project or all projects, stored as plai
 - **Cards** rich markdown card bodies with preview/edit toggle, status dropdown, and delete confirm; new cards are filed under the project you're viewing
 - **Drag-and-drop** move cards between columns with HTML5 drag
 - **Search** filter cards across all columns from the board header
-- **Standalone cards** cards with no project (sketching a plan before the project exists) live in `~/.coder/global-board.json`
+- **Standalone cards** cards with no project (sketching a plan before the project exists) live in `~/.coder/global-board.json`. The [phone app's Inbox](/phone#inbox-ideas-without-a-project) adds to these, and the panel updates as soon as the phone syncs
 - **AI-writable** each project's board is `{project-root}/board.json` so the AI can read and update tasks directly; the FS watcher syncs the UI instantly on external writes
 - **Import from Tickets** one click turns a GitHub issue or PR into a card (see [Tickets](/tickets)); re-importing updates the same card instead of duplicating it, and never overwrites the column you've moved it to
 - **Open-count badge** cards in the current project not in the last column are shown on the Board activity-bar icon, always live even while the panel is closed
